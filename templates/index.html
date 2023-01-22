@@ -32,9 +32,9 @@
       {% for data in historical_data %}
           <tr>
               <td>{{ data.Time }}</td>
-              <td>{{ data.Temperature(F) }}</td>
-              <td>{{ data.Humidity(%) }}</td>
-              <td>{{ data.Relay Status }}</td>
+              <td>{{ data['Temperature(F)'] }}</td>
+              <td>{{ data['Humidity(%)'] }}</td>
+              <td>{{ data['Relay Status'] }}</td>
           </tr>
       {% endfor %}
   </table>
