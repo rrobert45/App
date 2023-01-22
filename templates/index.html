@@ -31,10 +31,10 @@
         </tr>
         {% for data in historical_data %}
             <tr>
-                <td>{{ data.time }}</td>
-                <td>{{ data.temperature }}</td>
-                <td>{{ data.humidity }}</td>
-                <td>{{ data.relay_status }}</td>
+                <td>{{ dbTime }}</td>
+                <td>{{ dbTemperature }}</td>
+                <td>{{ dbHumidity }}</td>
+                <td>{{ dbRelay }}</td>
             </tr>
         {% endfor %}
     </table>

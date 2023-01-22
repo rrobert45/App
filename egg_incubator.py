@@ -87,14 +87,20 @@ def read_and_log_data():
 
 @app.route("/")
 def index():
-    thread = Thread(target=read_and_log_data)
-    thread.start()
-    temperature, humidity = read_sensor_data()
-    last_relay_on_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(last_relay_on))
-    # Fetch the data from the MongoDB collection
-    cursor = incubator.find().sort("Time",-1).limit(48)
-    data = list(cursor)
-    return render_template('index.html', data=data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
+        thread = Thread(target=read_and_log_data)
+        thread.start()
+        temperature, humidity = read_sensor_data()
+        last_relay_on_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(last_relay_on))
+        # Fetch the data from the MongoDB collection
+        cursor = incubator.find()
+        df =  pd.DataFrame(list(cursor))
+        
+        # Format the data for the graph
+        dbTime = df["Time"].tolist()
+        dbTemperature = df["Temperature(F)"].tolist()
+        dbHumidity = df["Humidity(%)"].tolist()
+        dbRelay = df["Relay Status"].tolist()
+        return render_template('index.html', dbTime=dbTime, dbTemperature=dbTemperature, dbHumidity=dbHumidity, dbRelay=dbRelay, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
