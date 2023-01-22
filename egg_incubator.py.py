@@ -8,7 +8,7 @@ import os
 from pymongo import MongoClient
 
 # Connect to MongoDB
-uri = "mongodb+srv://rrobert45:xP4sfa9hsptanQwU@cluster0.r8sgbwj.mongodb.net/Cluster0/?retryWrites=true&w=majority"
+uri = "mongodb+srv://rrobert45:xP4sfa9hsptanQwU@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(uri)
 db = client.EggApp
 incubator = db.incubator
