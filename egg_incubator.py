@@ -25,14 +25,16 @@ pin = 4
 relay = 17
 
 # Set the interval for logging data and turning on the relay (in seconds)
-log_interval = 1800 # 15 minutes
-relay_interval = 14400 # 4 hours
+log_interval = 30 # 15 minutes
+relay_interval = 60 # 4 hours
+roll_interval = 5 
 
 # Initialize the GPIO pin for the relay
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(relay, GPIO.OUT)
 
 last_relay_on = time.time()
+
 
 def read_sensor_data():
     # Read the humidity and temperature
@@ -64,7 +66,7 @@ def check_relay():
         GPIO.output(relay, GPIO.HIGH)
         last_relay_on = current_time
         log_data(temperature, humidity, "ON")
-        time.sleep(120)
+        time.sleep(roll_interval)
         GPIO.output(relay, GPIO.LOW)
         log_data(temperature, humidity, "OFF")
     else:
