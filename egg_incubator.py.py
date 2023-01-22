@@ -25,7 +25,7 @@ pin = 4
 relay = 17
 
 # Set the interval for logging data and turning on the relay (in seconds)
-log_interval = 1800 # 5 minutes
+log_interval = 1800 # 15 minutes
 relay_interval = 14400 # 4 hours
 
 # Initialize the GPIO pin for the relay
@@ -68,15 +68,13 @@ def check_relay():
         GPIO.output(relay, GPIO.LOW)
         log_data(temperature, humidity, "OFF")
     else:
-        pass
+        log_data(temperature, humidity, "OFF")
 
 
 
 def read_and_log_data():
     try:
         while True:
-            temperature, humidity = read_sensor_data()
-            log_data(temperature, humidity)
             check_relay()
             time.sleep(log_interval)
     except KeyboardInterrupt:
