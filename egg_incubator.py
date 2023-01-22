@@ -94,6 +94,7 @@ def index():
         # Fetch the data from the MongoDB collection
         cursor = incubator.find()
         df =  pd.DataFrame(list(cursor))
+        print(df)
 
         # Format the data for the graph
         x_data = df["Time"].tolist()
