@@ -1,55 +1,85 @@
-/* Use a dark theme */
-body {
-  background-color: black;
-  color: white;
-}
-
-/* Add a neon green highlight color */
-.highlight {
-  color: #39ff14;
-}
-
-/* Style the current data section */
-.current-data {
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  }
+  
+  th, td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  }
+  
+  th {
+  background-color: #dddddd;
+  }
+  
+  .current-data {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: #000000;
-  color: #00ff00;
-  padding: 10px;
-}
-
-/* Style the data rows in the current data section */
-.data-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-/* Style the data label in the current data section */
-.data-label {
-  font-weight: bold;
-}
-
-/* Style the data table */
-.data-table {
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Style the table headers */
-.data-table th {
-  padding: 12px;
-  border-bottom: 2px solid #39ff14;
+  align-items: center;
+  }
+  
+  .data-label {
+  width: 40%;
+  text-align: right;
+  }
+  
+  .data-value {
+  width: 60%;
   text-align: left;
-}
-
-/* Style the table cells */
-.data-table td {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Style the table rows on hover */
-.data-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
+  }
+  
+  body {
+  background-color: black;
+  color: #00ff00;
+  }
+  
+  h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  }
+  
+  .dark-theme {
+  background-color: black;
+  color: #00ff00;
+  }
+  
+  .data-table {
+  margin-top: 50px;
+  }
+  
+  .relay-table {
+  margin-top: 50px;
+  }
+  
+  .current-data .data-row {
+  margin-bottom: 10px;
+  }
+  
+  .text-center {
+  text-align: center;
+  }
+  
+  .relative {
+  position: relative;
+  }
+  
+  .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  }
+  
+  .center h1{
+  text-align: center;
+  }
+  
+  .center table{
+  margin: auto;
+  }
+  
+  .center td{
+  text-align: center;
+  }
