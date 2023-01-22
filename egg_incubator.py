@@ -58,8 +58,8 @@ def log_data(temperature, humidity, relay_status):
 def check_relay():
     current_time = time.time()
     global last_relay_on
+    temperature, humidity = read_sensor_data()
     if current_time - last_relay_on >= relay_interval:
-        temperature, humidity = read_sensor_data()
         # Turn on the relay for 2 minutes
         GPIO.output(relay, GPIO.HIGH)
         last_relay_on = current_time
