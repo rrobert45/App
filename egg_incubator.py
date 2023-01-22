@@ -83,7 +83,7 @@ def read_and_log_data():
         # Clean up the GPIO pins
         GPIO.cleanup()
         # Close the MongoDB connection
-        #client.close()
+        client.close()
 
 @app.route("/")
 def index():
