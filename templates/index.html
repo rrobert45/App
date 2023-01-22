@@ -27,7 +27,7 @@
     // Code to generate the historical data graph using Plotly
     var x_data = JSON.parse('{{ x_data|tojson|safe }}');
     var y_data = JSON.parse('{{ y_data|tojson|safe }}');
-    var humidity_data = JSON.parse('{{ humidity_data|tojson|safe }}');
+    var humidity_data = JSON.parse('{{ y2_data|tojson|safe }}');
 
 
     var data = [
