@@ -23,21 +23,21 @@
   <div class="data-table">
     <h1>Historical Data (Last 48 Hours)</h1>
     <table>
-        <tr>
-            <th>Time</th>
-            <th>Temperature (F)</th>
-            <th>Humidity(%)</th>
-            <th>Relay Status</th>
-        </tr>
-        {% for data in historical_data %}
-            <tr>
-                <td>{{ dbTime }}</td>
-                <td>{{ dbTemperature }}</td>
-                <td>{{ dbHumidity }}</td>
-                <td>{{ dbRelay }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+      <tr>
+          <th>Time</th>
+          <th>Temperature (F)</th>
+          <th>Humidity(%)</th>
+          <th>Relay Status</th>
+      </tr>
+      {% for data in historical_data %}
+          <tr>
+              <td>{{ data.Time }}</td>
+              <td>{{ data.Temperature(F) }}</td>
+              <td>{{ data.Humidity(%) }}</td>
+              <td>{{ data.Relay Status }}</td>
+          </tr>
+      {% endfor %}
+  </table>
   </div>
 </body>
 </html>
