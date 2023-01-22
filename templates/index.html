@@ -21,6 +21,25 @@
     </div>
   </div>
   <div class="data-table">
+    <h1>Last 10 Relay On Times</h1>
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Temperature (F)</th>
+            <th>Humidity(%)</th>
+            <th>Relay Status</th>
+        </tr>
+        {% for data in relay_data %}
+            <tr>
+                <td>{{ data.Time }}</td>
+                <td>{{ data["Temperature(F)"] }}</td>
+                <td>{{ data["Humidity(%)"] }}</td>
+                <td>{{ data["Relay Status"] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+  <div class="data-table">
     <h1>Historical Data (Last 48 Hours)</h1>
     <table>
       <tr>

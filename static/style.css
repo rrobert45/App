@@ -11,9 +11,10 @@ body {
 
 /* Style the current data section */
 .current-data {
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
+  text-align: center;
+  background-color: #000000;
+  color: #00ff00;
+  padding: 10px;
 }
 
 /* Style the data rows in the current data section */
