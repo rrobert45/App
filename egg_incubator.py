@@ -94,7 +94,16 @@ def index():
         temperature, humidity = read_sensor_data()
         last_relay_on_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(last_relay_on))
         # Fetch the data from the MongoDB collection
-        cursor = incubator.find().limit(48)
+        cursor = incubator.find({"Relay Status": "ON"}).sort("Time", -1).limit(10)
+        relay_data = []
+        for data in cursor:
+            relay_data.append({
+                'Time': data['Time'],
+                'Temperature(F)': data['Temperature(F)'],
+                'Humidity(%)': data['Humidity(%)'],
+                'Relay Status': data['Relay Status']
+            })
+        cursor = incubator.find().limit(48).sort("Time", -1)
         historical_data = []
         for data in cursor:
             historical_data.append({
@@ -103,7 +112,7 @@ def index():
                 'Humidity(%)': data['Humidity(%)'],
                 'Relay Status': data['Relay Status']
             })
-        return render_template('index.html', historical_data=historical_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
+        return render_template('index.html', historical_data=historical_data, relay_data=relay_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

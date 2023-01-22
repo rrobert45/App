@@ -29,12 +29,12 @@
             <th>Humidity(%)</th>
             <th>Relay Status</th>
         </tr>
-        {% for data in relay_data %}
+        {% for x in relay_data %}
             <tr>
-                <td>{{ data.Time }}</td>
-                <td>{{ data["Temperature(F)"] }}</td>
-                <td>{{ data["Humidity(%)"] }}</td>
-                <td>{{ data["Relay Status"] }}</td>
+                <td>{{ x.Time }}</td>
+                <td>{{ x["Temperature(F)"] }}</td>
+                <td>{{ x["Humidity(%)"] }}</td>
+                <td>{{ x["Relay Status"] }}</td>
             </tr>
         {% endfor %}
     </table>
