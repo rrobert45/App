@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Temperature and Humidity Monitor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body class="dark-theme">
+  <div class="current-data">
+    <h1>Current Data</h1>
+    <div class="data-row">
+      <div class="data-label">Temperature:</div>
+      <div class="data-value">{{ temperature }} F</div>
+    </div>
+    <div class="data-row">
+      <div class="data-label">Humidity:</div>
+      <div class="data-value">{{ humidity }} %</div>
+    </div>
+    <div class="data-row">
+      <div class="data-label">Last Relay On Time:</div>
+      <div class="data-value">{{ last_relay_on }}</div>
+    </div>
+  </div>
+  <div id="graph"></div>
+  <script>
+    // Code to generate the historical data graph using Plotly
+    var x_data = JSON.parse('{{ x_data|tojson|safe }}');
+    var y_data = JSON.parse('{{ y_data|tojson|safe }}');
+    var humidity_data = JSON.parse('{{ humidity_data|tojson|safe }}');
+
+
+    var data = [
+        {
+          x: x_data,
+          y: y_data,
+          type: 'line',
+          mode: 'lines+markers',
+          line: {
+            color: 'rgb(255, 255, 255)',
+            width: 2
+          },
+          name: 'Temperature'
+        },
+        {
+          x: x_data,
+          y: humidity_data,
+          type: 'line',
+          mode: 'lines+markers',
+          line: {
+            color: 'rgb(255, 0, 0)',
+            width: 2
+          },
+          name: 'Humidity',
+          yaxis: 'y2'
+        }
+      ];
+
+    var layout = {
+      xaxis: {
+        title: 'Time',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        gridcolor: 'rgb(255, 255, 255)',
+        linecolor: 'rgb(255, 255, 255)',
+        zerolinecolor: 'rgb(255, 255, 255)',
+        tickfont: {
+          color: 'rgb(255, 255, 255)'
+        }
+      },
+      yaxis: {
+        title: 'Temperature (F)',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        gridcolor: 'rgb(255, 255, 255)',
+        linecolor: 'rgb(255, 255, 255)',
+        zerolinecolor: 'rgb(255, 255, 255)',
+        tickfont: {
+          color: 'rgb(255, 255, 255)'
+        }
+      },
+      yaxis2: {
+        title: 'Humidity(%)',
+        showgrid: true,
+        zeroline: true,
+        showline: true,
+        gridcolor: 'rgb(255, 255, 255)',
+        linecolor: 'rgb(255, 255, 255)',
+        zerolinecolor: 'rgb(255, 255, 255)',
+        tickfont: {
+            color: 'rgb(255, 255, 255)'
+            },
+            overlaying: 'y',
+            side: 'right'
+        },
+
+
+      paper_bgcolor: 'rgb(50, 50, 50)',
+      plot_bgcolor: 'rgb(50, 50, 50)',
+      font: {
+        color: 'rgb(255, 255, 255)'
+      }
+    };
+    Plotly.newPlot('graph', data, layout);
+  </script>
+</body>
+</html>
