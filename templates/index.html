@@ -3,8 +3,6 @@
 <head>
   <title>Temperature and Humidity Monitor</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body class="dark-theme">
   <div class="current-data">
@@ -22,88 +20,24 @@
       <div class="data-value">{{ last_relay_on }}</div>
     </div>
   </div>
-  <div id="graph"></div>
-  <script>
-    // Code to generate the historical data graph using Plotly
-    var x_data = JSON.parse('{{ x_data|tojson|safe }}');
-    var y_data = JSON.parse('{{ y_data|tojson|safe }}');
-    var humidity_data = JSON.parse('{{ y2_data|tojson|safe }}');
-
-
-    var data = [
-        {
-          x: x_data,
-          y: y_data,
-          type: 'line',
-          mode: 'lines+markers',
-          line: {
-            color: 'rgb(255, 255, 255)',
-            width: 2
-          },
-          name: 'Temperature'
-        },
-        {
-          x: x_data,
-          y: humidity_data,
-          type: 'line',
-          mode: 'lines+markers',
-          line: {
-            color: 'rgb(255, 0, 0)',
-            width: 2
-          },
-          name: 'Humidity',
-          yaxis: 'y2'
-        }
-      ];
-
-    var layout = {
-      xaxis: {
-        title: 'Time',
-        showgrid: true,
-        zeroline: true,
-        showline: true,
-        gridcolor: 'rgb(255, 255, 255)',
-        linecolor: 'rgb(255, 255, 255)',
-        zerolinecolor: 'rgb(255, 255, 255)',
-        tickfont: {
-          color: 'rgb(255, 255, 255)'
-        }
-      },
-      yaxis: {
-        title: 'Temperature (F)',
-        showgrid: true,
-        zeroline: true,
-        showline: true,
-        gridcolor: 'rgb(255, 255, 255)',
-        linecolor: 'rgb(255, 255, 255)',
-        zerolinecolor: 'rgb(255, 255, 255)',
-        tickfont: {
-          color: 'rgb(255, 255, 255)'
-        }
-      },
-      yaxis2: {
-        title: 'Humidity(%)',
-        showgrid: true,
-        zeroline: true,
-        showline: true,
-        gridcolor: 'rgb(255, 255, 255)',
-        linecolor: 'rgb(255, 255, 255)',
-        zerolinecolor: 'rgb(255, 255, 255)',
-        tickfont: {
-            color: 'rgb(255, 255, 255)'
-            },
-            overlaying: 'y',
-            side: 'right'
-        },
-
-
-      paper_bgcolor: 'rgb(50, 50, 50)',
-      plot_bgcolor: 'rgb(50, 50, 50)',
-      font: {
-        color: 'rgb(255, 255, 255)'
-      }
-    };
-    Plotly.newPlot('graph', data, layout);
-  </script>
+  <div class="data-table">
+    <h1>Historical Data (Last 48 Hours)</h1>
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Temperature (F)</th>
+            <th>Humidity(%)</th>
+            <th>Relay Status</th>
+        </tr>
+        {% for data in historical_data %}
+            <tr>
+                <td>{{ data.time }}</td>
+                <td>{{ data.temperature }}</td>
+                <td>{{ data.humidity }}</td>
+                <td>{{ data.relay_status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+  </div>
 </body>
 </html>
