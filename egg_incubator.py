@@ -148,10 +148,11 @@ def read_and_log_data():
 
 @app.route("/")
 def index():
-        thread = Thread(target=read_and_log_data)
-        thread.start()
         sensor_thread = Thread(target=sensor_control)
         sensor_thread.start()
+        thread = Thread(target=read_and_log_data)
+        thread.start()
+        
         last_relay_on_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(last_relay_on))
         # Fetch the data from the MongoDB collection
         cursor = incubator.find({"Relay Status": "ON"}).sort("Time", -1).limit(10)
@@ -172,7 +173,7 @@ def index():
                 'Humidity(%)': data['Humidity(%)'],
                 'Relay Status': data['Relay Status']
             })
-        return render_template('index.html', historical_data=historical_data, relay_data=relay_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
+        return render_template('index.html', historical_data=historical_data, relay_data=relay_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time,temperature_relay_status=temperature_relay_status,humidity_relay_status=humidity_relay_status)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
