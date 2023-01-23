@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 from flask import Flask, render_template
 import time
@@ -7,52 +6,36 @@ import RPi.GPIO as GPIO
 from threading import Thread
 import os
 from pymongo import MongoClient
-import smtplib
-import datetime
-
-# Load the config file
-with open('config.json') as config_file:
-    config = json.load(config_file)
 
 # Connect to MongoDB
-client = MongoClient(config['uri'])
+uri = "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(uri)
 db = client.EggApp
 incubator = db.incubator
+
+print(os.getcwd())
 
 app = Flask(__name__, static_folder='static')
 
 # Set the sensor type (DHT22) and the GPIO pin number
 sensor = Adafruit_DHT.DHT22
-pin = config['pin']
+pin = 4
 
-# Set the relay pin numbers
-humidity_relay = config['humidity_relay']
-temperature_relay = config['temperature_relay']
-roller_relay = config['roller_relay']
+# Set the relay pin number
+relay = 17
 
 # Set the interval for logging data and turning on the relay (in seconds)
-log_interval = config['log_interval']
-relay_interval = config['relay_interval']
-roll_interval = config['roll_interval']
+log_interval = 60*15 # 15 minutes
+relay_interval = 60*60*2 # 2 hours
+roll_interval = 3*60
 
-# Initialize the GPIO pins for the relays
+# Initialize the GPIO pin for the relay
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(humidity_relay, GPIO.OUT)
-GPIO.setup(temperature_relay, GPIO.OUT)
+GPIO.setup(relay, GPIO.OUT)
 
 last_relay_on = time.time()
 
-# Set the email address and password for the email alert
-email_address = config['email_address']
-email_password = config['email_password']
 
-temperature_relay_status = ""
-humidity_relay_status = ""
-day_in_cycle = ""
-
-
-# Set the start date
-start_date = datetime.datetime.strptime(config['start_date'], '%m/%d/%Y %I:%M%p')
 def read_sensor_data():
     # Read the humidity and temperature
     humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
@@ -63,60 +46,16 @@ def read_sensor_data():
         print('Failed to read data from sensor')
         return None, None
 
-def log_data(temperature, humidity, eggroller_relay_status, temperature_relay_status, humidity_relay_status, day_in_cycle):
+def log_data(temperature, humidity, relay_status):
     # Create a data dictionary
     data = {
         'Time': time.strftime("%m-%d-%Y %H:%M:%S"),
         'Temperature(F)': temperature,
-        'Temperature Relay': temperature_relay_status,
         'Humidity(%)': humidity,
-        'Humidity Relay': humidity_relay_status,
-        'Eggroller Relay': eggroller_relay_status,
-        'Day in Cycle': day_in_cycle
+        'Relay Status': relay_status
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
-
-def sensor_control():
-
-    global temperature_relay_status
-    global humidity_relay_status
-    global day_in_cycle
-    global temperature
-    global humidity
-
-    while True:
-        temperature, humidity = read_sensor_data()
-        start_time = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-        current_time = datetime.now()
-        day_in_cycle = (current_time - start_time).days
-        if temperature <= 100:
-            GPIO.output(temperature_relay, GPIO.HIGH)
-            temperature_relay_status = "ON"
-        elif temperature >= 101:
-            GPIO.output(temperature_relay, GPIO.LOW)
-            temperature_relay_status = "OFF"
-        else:
-            pass
-            
-        if day_in_cycle <= 17:
-            if humidity < 50:
-                GPIO.output(humidity_relay, GPIO.HIGH)
-                humidity_relay_status = "ON"
-            else:
-                GPIO.output(humidity_relay, GPIO.LOW)
-                humidity_relay_status = "OFF"
-        elif day_in_cycle > 17:
-            if humidity < 70:
-                GPIO.output(humidity_relay, GPIO.HIGH)
-                humidity_relay_status = "ON"
-            else:
-                GPIO.output(humidity_relay, GPIO.LOW)
-                humidity_relay_status = "OFF"
-        
-        time.sleep(10)
-
-
 
 def check_relay():
     current_time = time.time()
@@ -124,16 +63,16 @@ def check_relay():
     temperature, humidity = read_sensor_data()
     if current_time - last_relay_on >= relay_interval:
         # Turn on the relay for 2 minutes
-        GPIO.output(roller_relay, GPIO.HIGH)
+        GPIO.output(relay, GPIO.HIGH)
         last_relay_on = current_time
-        log_data(temperature, humidity, "ON",temperature_relay_status,humidity_relay_status,day_in_cycle)
+        log_data(temperature, humidity, "ON")
         time.sleep(roll_interval)
-        GPIO.output(roller_relay, GPIO.LOW)
-        log_data(temperature, humidity, "OFF",temperature_relay_status,humidity_relay_status,day_in_cycle)
+        GPIO.output(relay, GPIO.LOW)
+        log_data(temperature, humidity, "OFF")
     else:
-        log_data(temperature, humidity, "OFF",temperature_relay_status,humidity_relay_status,day_in_cycle)
+        log_data(temperature, humidity, "OFF")
 
-   
+
 
 def read_and_log_data():
     try:
@@ -148,14 +87,11 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
-
 @app.route("/")
 def index():
-        sensor_thread = Thread(target=sensor_control)
-        sensor_thread.start()
         thread = Thread(target=read_and_log_data)
         thread.start()
-        
+        temperature, humidity = read_sensor_data()
         last_relay_on_time = time.strftime("%m-%d-%Y %H:%M:%S", time.localtime(last_relay_on))
         # Fetch the data from the MongoDB collection
         cursor = incubator.find({"Relay Status": "ON"}).sort("Time", -1).limit(10)
@@ -176,7 +112,7 @@ def index():
                 'Humidity(%)': data['Humidity(%)'],
                 'Relay Status': data['Relay Status']
             })
-        return render_template('index.html', historical_data=historical_data, relay_data=relay_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time,temperature_relay_status=temperature_relay_status,humidity_relay_status=humidity_relay_status)
+        return render_template('index.html', historical_data=historical_data, relay_data=relay_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on_time)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')
