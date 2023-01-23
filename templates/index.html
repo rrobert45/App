@@ -7,20 +7,19 @@
 <body class="dark-theme">
   <div class="current-data">
     <h1>Current Data</h1>
-    <div class="data-row">
-      <div class="data-label">Temperature:</div>
-      <div class="data-value">{{ temperature }} F</div>
-    </div>
-    <div class="data-row">
-      <div class="data-label">Humidity:</div>
-      <div class="data-value">{{ humidity }} %</div>
-    </div>
-    <div class="data-row">
-      <div class="data-label">Last Relay On Time:</div>
-      <div class="data-value">{{ last_relay_on }}</div>
-    </div>
-  </div>
-  <div class="data-table">
+    <table>
+        <tr>
+            <th>Temperature (F)</th>
+            <th>Humidity (%)</th>
+            <th>Last Relay On Time</th>
+        </tr>
+        <tr>
+            <td>{{ temperature }}</td>
+            <td>{{ humidity }}</td>
+            <td>{{ last_relay_on }}</td>
+        </tr>
+    </table>
+</div>
     <h1>Last 10 Relay On Times</h1>
     <table>
         <tr>

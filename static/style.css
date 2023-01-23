@@ -1,85 +1,59 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.dark-theme {
+  background-color: black;
+  color: white;
+}
+
+h1 {
+  text-align: center;
+  color: #39ff14;
+}
+
+.current-data {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.data-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.data-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.data-value {
+  font-weight: bold;
+}
+
+.data-table {
+  margin: 20px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  text-align: center;
-  }
-  
-  th, td {
-  border: 1px solid #dddddd;
+}
+
+th, td {
+  border: 1px solid #39ff14;
   padding: 8px;
-  }
-  
-  th {
-  background-color: #dddddd;
-  }
-  
-  .current-data {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  }
-  
-  .data-label {
-  width: 40%;
-  text-align: right;
-  }
-  
-  .data-value {
-  width: 60%;
   text-align: left;
-  }
-  
-  body {
-  background-color: black;
-  color: #00ff00;
-  }
-  
-  h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  }
-  
-  .dark-theme {
-  background-color: black;
-  color: #00ff00;
-  }
-  
-  .data-table {
-  margin-top: 50px;
-  }
-  
-  .relay-table {
-  margin-top: 50px;
-  }
-  
-  .current-data .data-row {
-  margin-bottom: 10px;
-  }
-  
-  .text-center {
-  text-align: center;
-  }
-  
-  .relative {
-  position: relative;
-  }
-  
-  .center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  }
-  
-  .center h1{
-  text-align: center;
-  }
-  
-  .center table{
-  margin: auto;
-  }
-  
-  .center td{
-  text-align: center;
-  }
+}
+
+th {
+  background-color: #39ff14;
+  color: black;
+}
