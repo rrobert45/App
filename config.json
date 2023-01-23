@@ -1,0 +1,13 @@
+{
+    "uri": "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority",
+    "log_interval": 900,
+    "relay_interval": 7200,
+    "roll_interval": 180,
+    "pin": 4,
+    "humidity_relay": 19,
+    "temperature_relay": 18,
+    "roller_relay":17,
+    "email_address": "example@email.com",
+    "email_password": "password",
+    "start_date": "01/23/2023 1:00pm"
+}
