@@ -46,6 +46,9 @@ last_relay_on = time.time()
 email_address = config['email_address']
 email_password = config['email_password']
 
+temperature_relay_status = ""
+humidity_relay_status = ""
+day_in_cycle = ""
 
 
 # Set the start date
@@ -84,7 +87,7 @@ def sensor_control():
 
     while True:
         temperature, humidity = read_sensor_data()
-        start_time = datetime.strptime(start_date, '%Y-%m-%d')
+        start_time = datetime.datetime.strptime(start_date, '%Y-%m-%d')
         current_time = datetime.now()
         day_in_cycle = (current_time - start_time).days
         if temperature <= 100:
