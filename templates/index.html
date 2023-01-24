@@ -18,7 +18,7 @@
             <tr>
               <td>Log Interval</td>
               <td>{{ data.log_interval }} seconds</td>
-              <td><button class="update-button" onclick="updateValue('log_interval', this.previousSibling.innerHTML)">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('log_interval', {{ data.log_interval }})">Update</button></td>
             </tr>
             <tr>
               <td>Relay Interval</td>
