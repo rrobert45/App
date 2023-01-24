@@ -150,6 +150,27 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
+
+
+
+
+
+data = {
+    'log_interval': log_interval,
+    'relay_interval': relay_interval,
+    'roll_interval': roll_interval,
+    'temperature_threshold': temperature_threshold,
+    'humidity_threshold': humidity_threshold,
+    'historical_data': historical_data,
+    'temperature': temperature,
+    'humidity': humidity,
+    'last_relay_on': last_relay_on,
+    'temperature_relay_status': temperature_relay_status,
+    'humidity_relay_status': humidity_relay_status
+}
+
+
+
 @app.route("/")
 def index():
         
@@ -172,7 +193,20 @@ def index():
                 'Humidity Relay Status': data['Humidity Relay Status'],
                 'Last Egg Turn': data['Last Egg Turn']
             })
-        return render_template('index.html',log_interval=log_interval,relay_interval=relay_interval,roll_interval=roll_interval,temperature_threshold=temperature_threshold, humidity_threshold=humidity_threshold, historical_data=historical_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on, temperature_relay_status=temperature_relay_status, humidity_relay_status=humidity_relay_status)
+        data = {
+            'log_interval': log_interval,
+            'relay_interval': relay_interval,
+            'roll_interval': roll_interval,
+            'temperature_threshold': temperature_threshold,
+            'humidity_threshold': humidity_threshold,
+            'historical_data': historical_data,
+            'temperature': temperature,
+            'humidity': humidity,
+            'last_relay_on': last_relay_on,
+            'temperature_relay_status': temperature_relay_status,
+            'humidity_relay_status': humidity_relay_status
+        }
+        return render_template('index.html',data=data)
 
 
 if __name__ == "__main__":
