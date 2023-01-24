@@ -10,49 +10,40 @@
     <table>
         <tr>
             <th>Temperature (F)</th>
+            <th>Temperature Relay Status</th>            
             <th>Humidity (%)</th>
-            <th>Last Relay On Time</th>
+            <th>Humidity Relay Status</th>
+            <th>Last Egg Turn</th>
         </tr>
         <tr>
             <td>{{ temperature }}</td>
+            <td>{{ temperature_relay_status }}</td>
             <td>{{ humidity }}</td>
+            <td>{{ humidity_relay_status }}</td>
             <td>{{ last_relay_on }}</td>
         </tr>
     </table>
-</div>
-    <h1>Last 10 Relay On Times</h1>
-    <table>
-        <tr>
-            <th>Time</th>
-            <th>Temperature (F)</th>
-            <th>Humidity(%)</th>
-            <th>Relay Status</th>
-        </tr>
-        {% for x in relay_data %}
-            <tr>
-                <td>{{ x.Time }}</td>
-                <td>{{ x["Temperature(F)"] }}</td>
-                <td>{{ x["Humidity(%)"] }}</td>
-                <td>{{ x["Relay Status"] }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+</div> 
 </div>
   <div class="data-table">
     <h1>Historical Data (Last 48 Hours)</h1>
     <table>
       <tr>
-          <th>Time</th>
-          <th>Temperature (F)</th>
-          <th>Humidity(%)</th>
-          <th>Relay Status</th>
+        <th>Time</th>
+        <th>Temperature (F)</th>
+        <th>Humidity(%)</th>
+        <th>Temperature Relay Status</th>
+        <th>Humidity Relay Status</th>
+        <th>Last Egg Turn</th>
       </tr>
       {% for data in historical_data %}
           <tr>
-              <td>{{ data.Time }}</td>
-              <td>{{ data['Temperature(F)'] }}</td>
-              <td>{{ data['Humidity(%)'] }}</td>
-              <td>{{ data['Relay Status'] }}</td>
+            <td>{{ data.Time }}</td>
+            <td>{{ data["Temperature(F)"] }}</td>
+            <td>{{ data["Humidity(%)"] }}</td>
+            <td>{{ data["Temperature Relay Status"] }}</td>
+            <td>{{ data["Humidity Relay Status"] }}</td>
+            <td>{{ data["Last Egg Turn"] }}</td>
           </tr>
       {% endfor %}
   </table>
