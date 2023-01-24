@@ -191,7 +191,7 @@ def index():
             'temperature_relay_status': temperature_relay_status,
             'humidity_relay_status': humidity_relay_status,
             'day_in_cycle': day_in_cycle,
-            'start_date': start_date
+            'start_date': start_date.strftime("%m-%d-%Y")
         }
         return render_template('index.html',data=data)
 
