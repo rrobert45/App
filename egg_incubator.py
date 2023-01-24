@@ -156,7 +156,14 @@ def index():
         
         # Fetch the data from the MongoDB collection
         
-        cursor = incubator.find().limit(48).sort("Time", -1)
+
+        return render_template('index.html', temperature=temperature, humidity=humidity, last_relay_on=last_relay_on, temperature_relay_status=temperature_relay_status, humidity_relay_status=humidity_relay_status)
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0')
+
+"""
+cursor = incubator.find().limit(48).sort("Time", -1)
         historical_data = []
         for data in cursor:
             historical_data.append({
@@ -168,7 +175,4 @@ def index():
                 'Last Egg Turn': data['Last Egg Turn']
             })
         return render_template('index.html', historical_data=historical_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on, temperature_relay_status=temperature_relay_status, humidity_relay_status=humidity_relay_status)
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
-
+"""
