@@ -36,6 +36,7 @@ dataLogged = None
 eggPin = 0
 temperature_relay_status = ""
 humidity_relay_status = ""
+day_in_cycle = ""
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
@@ -60,6 +61,7 @@ def read_sensor_data():
         print('Failed to read data from sensor')
         return None, None
 
+
 def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status):
     # Create a data dictionary
     data = {
@@ -68,33 +70,35 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
         'Temperature Relay Status': temperature_relay_status,
         'Humidity(%)': humidity,
         'Humidity Relay Status': humidity_relay_status,
-        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P")
+        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P"),
+        'Day in Egg Cycle' : day_in_cycle
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
     
 
-
-
 def eggTurner():
-    
     current_time = datetime.now()
     global last_relay_on
     global eggPin
-    if last_relay_on is None:
-        last_relay_on = datetime.now()
-        eggPin = 0
-    if eggPin == 0:
-        if current_time - last_relay_on >= timedelta(seconds=relay_interval):
-            # Turn on the relay for 2 minutes
-            GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
-            eggPin = 1
-            last_relay_on = current_time
-    elif eggPin == 1:        
-        if current_time - last_relay_on >= timedelta(seconds=roll_interval):
-            GPIO.output(egg_turner_relay_pin, GPIO.LOW)
+    day_in_cycle = day()
+    if day_in_cycle <18:
+        if last_relay_on is None:
+            last_relay_on = datetime.now()
             eggPin = 0
+        if eggPin == 0:
+            if current_time - last_relay_on >= timedelta(seconds=relay_interval):
+                # Turn on the relay for 2 minutes
+                GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
+                eggPin = 1
+                last_relay_on = current_time
+        elif eggPin == 1:        
+            if current_time - last_relay_on >= timedelta(seconds=roll_interval):
+                GPIO.output(egg_turner_relay_pin, GPIO.LOW)
+                eggPin = 0
+
     return last_relay_on
+
 
 def control():
     temperature, humidity = read_sensor_data()
@@ -118,29 +122,34 @@ def control():
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
         humidity_relay_status = "ON"
     
+
+def day():
+    global humidity_threshold
+    current_date = datetime.now()
+    total_days = 21
+    day_in_cycle = (current_date - start_date).days % total_days
+    if day_in_cycle >= 18:
+        humidity_threshold = 70
+    return day_in_cycle
     
-
-
-
-
 
 def read_and_log_data():
     global dataLogged
-    global day_in_cycle
+    day_in_cycle = day()
     try:
         while True:
-            day_in_cycle = (current_date - start_date).days % total_days
+            
             control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
             if dataLogged is None:
                 dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
+                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
                 
             elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
                 dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
-                
+                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
+               
             
             time.sleep(10)
             
@@ -153,12 +162,11 @@ def read_and_log_data():
         client.close()
 
 start_date = datetime(2023, 1, 20)
-current_date = datetime.now()
-total_days = 21
+
 
 @app.route("/")
 def index():
-        
+        day_in_cycle = day()
         thread = Thread(target=read_and_log_data)
         thread.start()
         temperature, humidity = read_sensor_data()
@@ -176,7 +184,8 @@ def index():
                 'Temperature Relay Status': data['Temperature Relay Status'],
                 'Humidity(%)': data['Humidity(%)'],
                 'Humidity Relay Status': data['Humidity Relay Status'],
-                'Last Egg Turn': data['Last Egg Turn']
+                'Last Egg Turn': data['Last Egg Turn'],
+                'Day in Egg Cycle' : data['Day in Egg Cycle']
             })
         data = {
             'log_interval': log_interval,

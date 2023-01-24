@@ -71,6 +71,7 @@
         <th>Temperature Relay Status</th>
         <th>Humidity Relay Status</th>
         <th>Last Egg Turn</th>
+        <th>Day in Egg Cycle</th>
       </tr>
       {% for data in data.historical_data %}
           <tr>
@@ -80,6 +81,9 @@
             <td>{{ data["Temperature Relay Status"] }}</td>
             <td>{{ data["Humidity Relay Status"] }}</td>
             <td>{{ data["Last Egg Turn"] }}</td>
+            <td>{{ data["Day in Egg Cycle"] }}</td>
+
+            
           </tr>
       {% endfor %}
   </table>
