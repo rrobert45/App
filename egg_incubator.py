@@ -76,6 +76,8 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
 def eggTurner():
     
     current_time = datetime.now()
+    global last_relay_on
+    global eggPin
     if last_relay_on is None:
         last_relay_on = datetime.now()
         eggPin = 0
