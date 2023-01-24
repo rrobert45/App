@@ -32,6 +32,7 @@ log_interval = 60*15 # 15 minutes time between logging data to the database
 relay_interval = 60*60*2 # 2 hours between turning the eggs
 roll_interval = 3*60 #how long to turn the eggs
 last_relay_on = None
+dataLogged = None
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
@@ -116,7 +117,7 @@ def control():
 
 
 def read_and_log_data():
-    dataLogged = ""
+    
     try:
         while True:
             last_relay_on = eggTurner()
