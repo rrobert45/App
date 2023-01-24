@@ -62,7 +62,7 @@ def read_sensor_data():
         return None, None
 
 
-def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status):
+def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status,day_in_cycle):
     # Create a data dictionary
     data = {
         'Time': time.strftime("%m-%d-%Y %I:%M %p"),
@@ -135,10 +135,9 @@ def day():
 
 def read_and_log_data():
     global dataLogged
-    day_in_cycle = day()
     try:
         while True:
-            
+            day_in_cycle = day()
             control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
