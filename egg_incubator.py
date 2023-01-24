@@ -28,7 +28,7 @@ heat_relay_pin = 18
 humidifier_relay_pin = 19
 
 # Set the interval for logging data and turning on the relay (in seconds)
-log_interval = 60*15 # 15 minutes time between logging data to the database 
+log_interval = 30 # 15 minutes time between logging data to the database 
 relay_interval = 60*60*2 # 2 hours between turning the eggs
 roll_interval = 3*60 #how long to turn the eggs
 last_relay_on = None
@@ -115,7 +115,7 @@ def control():
     else:
         # Turn on the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
-        humidity_relay_status = "OFF"
+        humidity_relay_status = "ON"
     
     
 
@@ -136,6 +136,7 @@ def read_and_log_data():
             elif (datetime.now() - dataLogged).total_seconds() >= log_interval:
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
+            
             time.sleep(10)
     except KeyboardInterrupt:
         pass
