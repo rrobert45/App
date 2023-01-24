@@ -190,7 +190,8 @@ def index():
             'last_relay_on': last_relay_on,
             'temperature_relay_status': temperature_relay_status,
             'humidity_relay_status': humidity_relay_status,
-            'day_in_cycle': day_in_cycle
+            'day_in_cycle': day_in_cycle,
+            'start_date': start_date
         }
         return render_template('index.html',data=data)
 
