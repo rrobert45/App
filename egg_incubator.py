@@ -128,6 +128,7 @@ def read_and_log_data():
     global dataLogged
     try:
         while True:
+            control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
             if dataLogged is None:
