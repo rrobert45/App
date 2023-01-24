@@ -228,7 +228,8 @@ def update_settings():
     elif variable == 'roll_interval':
         roll_interval = int(value)
     elif variable == 'start_date':
-        start_date = datetime((value))
+        date =datetime.datetime.strptime(value, '%m/%d/%Y')
+        start_date = date.strftime('%Y,%m,%d')
     return jsonify({'status': 'success'})
 
 
