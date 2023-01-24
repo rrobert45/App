@@ -63,12 +63,12 @@ def read_sensor_data():
 def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status):
     # Create a data dictionary
     data = {
-        'Time': time.strftime("%m-%d-%Y %H:%M:%S"),
+        'Time': time.strftime("%m-%d-%Y %I:%M %p"),
         'Temperature(F)': temperature,
         'Temperature Relay Status': temperature_relay_status,
         'Humidity(%)': humidity,
         'Humidity Relay Status': humidity_relay_status,
-        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %H:%M %P")
+        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P")
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
@@ -158,7 +158,7 @@ def index():
         thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
-        last_relay_on = last_relay_on.strftime("%m-%d-%Y %H:%M %P")
+        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
         
         
         # Fetch the data from the MongoDB collection
