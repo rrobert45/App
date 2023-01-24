@@ -18,27 +18,27 @@
             <tr>
               <td>Log Interval</td>
               <td>{{ data.log_interval }} seconds</td>
-              <td><button class="update-button" onclick="updateValue('log_interval', {{ data.log_interval }})">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('log_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Relay Interval</td>
               <td>{{ data.relay_interval }} seconds</td>
-              <td><button class="update-button" onclick="updateValue('relay_interval', this.previousSibling.innerHTML)">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('relay_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Roll Interval</td>
               <td>{{ data.roll_interval }} seconds</td>
-              <td><button class="update-button" onclick="updateValue('roll_interval', this.previousSibling.innerHTML)">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('roll_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Temperature Threshold</td>
               <td>{{ data.temperature_threshold }} F</td>
-              <td><button class="update-button" onclick="updateValue('temperature_threshold', this.previousSibling.innerHTML)">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('temperature_threshold')">Update</button></td>
             </tr>
             <tr>
               <td>Humidity Threshold</td>
               <td>{{ data.humidity_threshold }} %</td>
-              <td><button class="update-button" onclick="updateValue('humidity_threshold', this.previousSibling.innerHTML)">Update</button></td>
+              <td><button class="update-button" onclick="updateValue('humidity_threshold')">Update</button></td>
             </tr>
           </table>
     </div>
