@@ -126,8 +126,10 @@ def control():
 
 def read_and_log_data():
     global dataLogged
+    global day_in_cycle
     try:
         while True:
+            day_in_cycle = (current_date - start_date).days % total_days
             control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
@@ -150,6 +152,9 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
+start_date = datetime.datetime(2023, 1, 20)
+current_date = datetime.datetime.now()
+total_days = 21
 
 @app.route("/")
 def index():
@@ -184,7 +189,8 @@ def index():
             'humidity': humidity,
             'last_relay_on': last_relay_on,
             'temperature_relay_status': temperature_relay_status,
-            'humidity_relay_status': humidity_relay_status
+            'humidity_relay_status': humidity_relay_status,
+            'day_in_cycle': day_in_cycle
         }
         return render_template('index.html',data=data)
 
