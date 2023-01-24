@@ -33,6 +33,7 @@ relay_interval = 60*60*2 # 2 hours between turning the eggs
 roll_interval = 3*60 #how long to turn the eggs
 last_relay_on = None
 dataLogged = None
+eggPin = 0
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
