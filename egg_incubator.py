@@ -69,6 +69,7 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
     incubator.insert_one(data)
 
 def eggTurner():
+    last_relay_on = ""
     current_time = datetime.now()
     if last_relay_on is None:
         last_relay_on = datetime.now()
