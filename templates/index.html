@@ -5,6 +5,35 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="dark-theme">
+    <div class="settings">
+        <h1>Settings</h1>
+        <table>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>Log Interval</td>
+            <td>{{ log_interval }} seconds</td>
+          </tr>
+          <tr>
+            <td>Relay Interval</td>
+            <td>{{ relay_interval }} seconds</td>
+          </tr>
+          <tr>
+            <td>Roll Interval</td>
+            <td>{{ roll_interval }} seconds</td>
+          </tr>
+          <tr>
+            <td>Temperature Threshold</td>
+            <td>{{ temperature_threshold }} F</td>
+          </tr>
+          <tr>
+            <td>Humidity Threshold</td>
+            <td>{{ humidity_threshold }} %</td>
+          </tr>
+        </table>
+      </div>
   <div class="current-data">
     <h1>Current Data</h1>
     <table>

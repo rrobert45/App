@@ -172,7 +172,7 @@ def index():
                 'Humidity Relay Status': data['Humidity Relay Status'],
                 'Last Egg Turn': data['Last Egg Turn']
             })
-        return render_template('index.html', historical_data=historical_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on, temperature_relay_status=temperature_relay_status, humidity_relay_status=humidity_relay_status)
+        return render_template('index.html',log_interval=log_interval,relay_interval=relay_interval,roll_interval=roll_interval,temperature_threshold=temperature_threshold, humidity_threshold=humidity_threshold, historical_data=historical_data, temperature=temperature, humidity=humidity, last_relay_on=last_relay_on, temperature_relay_status=temperature_relay_status, humidity_relay_status=humidity_relay_status)
 
 
 if __name__ == "__main__":
