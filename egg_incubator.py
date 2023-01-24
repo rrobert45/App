@@ -157,6 +157,7 @@ def index():
         thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
+        last_relay_on = last_relay_on.strftime("%m-%d-%Y %H:%M %P")
         
         
         # Fetch the data from the MongoDB collection
