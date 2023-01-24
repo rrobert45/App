@@ -68,7 +68,7 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
         'Temperature Relay Status': temperature_relay_status,
         'Humidity(%)': humidity,
         'Humidity Relay Status': humidity_relay_status,
-        'Last Egg Turn': last_relay_on
+        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %H:%M:%S")
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
