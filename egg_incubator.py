@@ -72,7 +72,7 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
-    print("Data logged")
+    
 
 
 
@@ -134,14 +134,14 @@ def read_and_log_data():
             if dataLogged is None:
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
-                print("datalogged = none / data logged")
+                
             elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
-                print("Time passed data logged")
+                
             
             time.sleep(10)
-            print("Slept for 10 seconds")
+            
     except KeyboardInterrupt:
         pass
     finally:
