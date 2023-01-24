@@ -125,7 +125,7 @@ def control():
 
 
 def read_and_log_data():
-    
+    global dataLogged
     try:
         while True:
             last_relay_on = eggTurner()
