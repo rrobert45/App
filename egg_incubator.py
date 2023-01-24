@@ -34,6 +34,8 @@ roll_interval = 3*60 #how long to turn the eggs
 last_relay_on = None
 dataLogged = None
 eggPin = 0
+temperature_relay_status = ""
+humidity_relay_status = ""
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
@@ -95,6 +97,8 @@ def eggTurner():
 
 def control():
     temperature, humidity = read_sensor_data()
+    global temperature_relay_status
+    global humidity_relay_status
     if temperature < temperature_threshold:
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
@@ -113,7 +117,7 @@ def control():
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
         humidity_relay_status = "OFF"
     
-    return temperature_relay_status, humidity_relay_status
+    
 
 
 
@@ -148,7 +152,7 @@ def index():
         thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
-        temperature_relay_status, humidity_relay_status = control()
+        
         
         # Fetch the data from the MongoDB collection
         
