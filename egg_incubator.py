@@ -31,6 +31,7 @@ humidifier_relay_pin = 19
 log_interval = 60*15 # 15 minutes time between logging data to the database 
 relay_interval = 60*60*2 # 2 hours between turning the eggs
 roll_interval = 3*60 #how long to turn the eggs
+last_relay_on = None
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
@@ -68,8 +69,10 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
     # Insert the data into the incubator collection
     incubator.insert_one(data)
 
+
+
 def eggTurner():
-    last_relay_on = ""
+    
     current_time = datetime.now()
     if last_relay_on is None:
         last_relay_on = datetime.now()
