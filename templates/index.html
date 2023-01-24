@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Temperature and Humidity Monitor</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Temperature and Humidity Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
 </head>
 <body class="dark-theme">
     <div class="settings">
         <h1>Settings</h1>
         <table>
-          <tr>
-            <th>Variable</th>
-            <th>Value</th>
-          </tr>
-          <tr>
-            <td>Log Interval</td>
-            <td>{{ data.log_interval }} seconds</td>
-          </tr>
-          <tr>
-            <td>Relay Interval</td>
-            <td>{{ data.relay_interval }} seconds</td>
-          </tr>
-          <tr>
-            <td>Roll Interval</td>
-            <td>{{ data.roll_interval }} seconds</td>
-          </tr>
-          <tr>
-            <td>Temperature Threshold</td>
-            <td>{{ data.temperature_threshold }} F</td>
-          </tr>
-          <tr>
-            <td>Humidity Threshold</td>
-            <td>{{ data.humidity_threshold }} %</td>
-          </tr>
-          <tr>
-            <td>Egg Cycle Start Date</td>
-            <td>{{ data.start_date }}</td>
-          </tr>
+            <tr>
+                <th>Variable</th>
+                <th>Value</th>
+                <th>Update</th>
+            </tr>
+            <tr>
+                <td>Log Interval</td>
+                <td>{{ data.log_interval }} seconds</td>
+                <td><button class="update-button" onclick="updateSetting('log_interval')">Update</button></td>
+            </tr>
+            <tr>
+                <td>Relay Interval</td>
+                <td>{{ data.relay_interval }} seconds</td>
+                <td><button class="update-button" onclick="updateSetting('relay_interval')">Update</button></td>
+            </tr>
+            <tr>
+                <td>Roll Interval</td>
+                <td>{{ data.roll_interval }} seconds</td>
+                <td><button class="update-button" onclick="updateSetting('roll_interval')">Update</button></td>
+            </tr>
+            <tr>
+                <td>Temperature Threshold</td>
+                <td>{{ data.temperature_threshold }} F</td>
+                <td><button class="update-button" onclick="updateSetting('temperature_threshold')">Update</button></td>
+            </tr>
+            <tr>
+                <td>Humidity Threshold</td>
+                <td>{{ data.humidity_threshold }} %</td>
+                <td><button class="update-button" onclick="updateSetting('humidity_threshold')">Update</button></td>
+            </tr>
         </table>
-      </div>
+    </div>
   <div class="current-data">
     <h1>Current Data</h1>
     <table>
@@ -90,3 +94,5 @@
   </div>
 </body>
 </html>
+
+

@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, render_template
+from flask import Flask, render_template,request, jsonify 
 import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
@@ -202,6 +202,28 @@ def index():
             'start_date': start_date.strftime("%m-%d-%Y")
         }
         return render_template('index.html',data=data)
+
+@app.route('/update_settings', methods=['POST'])
+def update_settings():
+    global temperature_threshold
+    global humidity_threshold
+    global log_interval
+    global relay_interval
+    global roll_interval
+    data = request.get_json()
+    variable = data['variable']
+    value = data['value']
+    if variable == 'temperature_threshold':
+        temperature_threshold = value
+    elif variable == 'humidity_threshold':
+        humidity_threshold = value
+    elif variable == 'log_interval':
+        log_interval = value
+    elif variable == 'relay_interval':
+        relay_interval = value
+    elif variable == 'roll_interval':
+        roll_interval = value
+    return jsonify({'status': 'success'})
 
 
 if __name__ == "__main__":
