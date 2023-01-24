@@ -214,15 +214,15 @@ def update_settings():
     variable = data['variable']
     value = data['value']
     if variable == 'temperature_threshold':
-        temperature_threshold = value
+        temperature_threshold = int(value)
     elif variable == 'humidity_threshold':
-        humidity_threshold = value
+        humidity_threshold = int(value)
     elif variable == 'log_interval':
-        log_interval = value
+        log_interval = int(value)
     elif variable == 'relay_interval':
-        relay_interval = value
+        relay_interval = int(value)
     elif variable == 'roll_interval':
-        roll_interval = value
+        roll_interval = int(value)
     return jsonify({'status': 'success'})
 
 
