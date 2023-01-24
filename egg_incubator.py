@@ -152,8 +152,8 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
-start_date = datetime.datetime(2023, 1, 20)
-current_date = datetime.datetime.now()
+start_date = datetime(2023, 1, 20)
+current_date = datetime.now()
 total_days = 21
 
 @app.route("/")
