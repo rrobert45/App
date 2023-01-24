@@ -39,7 +39,7 @@ humidity_relay_status = ""
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
-humidity_threshold = 20
+humidity_threshold = 50
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -133,9 +133,9 @@ def read_and_log_data():
             if dataLogged is None:
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
-            elif (datetime.now() - dataLogged).total_seconds() >= log_interval:
+            elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
                 dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
+            log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status)
             
             time.sleep(10)
     except KeyboardInterrupt:
