@@ -37,6 +37,7 @@ eggPin = 0
 temperature_relay_status = ""
 humidity_relay_status = ""
 day_in_cycle = ""
+start_date = datetime(2023, 1, 20)
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
@@ -160,7 +161,7 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
-start_date = datetime(2023, 1, 20)
+
 
 
 @app.route("/")
@@ -210,6 +211,7 @@ def update_settings():
     global log_interval
     global relay_interval
     global roll_interval
+    global start_date
     data = request.get_json()
     variable = data['variable']
     value = data['value']
@@ -223,6 +225,10 @@ def update_settings():
         relay_interval = int(value)
     elif variable == 'roll_interval':
         roll_interval = int(value)
+    elif variable == 'roll_interval':
+        roll_interval = int(value)
+    elif variable == 'start_date':
+        start_date = datetime(int(value))
     return jsonify({'status': 'success'})
 
 
