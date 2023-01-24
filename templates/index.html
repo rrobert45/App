@@ -14,23 +14,23 @@
           </tr>
           <tr>
             <td>Log Interval</td>
-            <td>{{ log_interval }} seconds</td>
+            <td>{{ data.log_interval }} seconds</td>
           </tr>
           <tr>
             <td>Relay Interval</td>
-            <td>{{ relay_interval }} seconds</td>
+            <td>{{ data.relay_interval }} seconds</td>
           </tr>
           <tr>
             <td>Roll Interval</td>
-            <td>{{ roll_interval }} seconds</td>
+            <td>{{ data.roll_interval }} seconds</td>
           </tr>
           <tr>
             <td>Temperature Threshold</td>
-            <td>{{ temperature_threshold }} F</td>
+            <td>{{ data.temperature_threshold }} F</td>
           </tr>
           <tr>
             <td>Humidity Threshold</td>
-            <td>{{ humidity_threshold }} %</td>
+            <td>{{ data.humidity_threshold }} %</td>
           </tr>
         </table>
       </div>
@@ -45,11 +45,11 @@
             <th>Last Egg Turn</th>
         </tr>
         <tr>
-            <td>{{ temperature }}</td>
-            <td>{{ temperature_relay_status }}</td>
-            <td>{{ humidity }}</td>
-            <td>{{ humidity_relay_status }}</td>
-            <td>{{ last_relay_on }}</td>
+            <td>{{ data.temperature }}</td>
+            <td>{{ data.temperature_relay_status }}</td>
+            <td>{{ data.humidity }}</td>
+            <td>{{ data.humidity_relay_status }}</td>
+            <td>{{ data.last_relay_on }}</td>
         </tr>
     </table>
 </div> 
@@ -65,7 +65,7 @@
         <th>Humidity Relay Status</th>
         <th>Last Egg Turn</th>
       </tr>
-      {% for data in historical_data %}
+      {% for data in data.historical_data %}
           <tr>
             <td>{{ data.Time }}</td>
             <td>{{ data["Temperature(F)"] }}</td>
