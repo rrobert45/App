@@ -143,11 +143,12 @@ def read_and_log_data():
 
 @app.route("/")
 def index():
-        last_relay_on = eggTurner()
-        temperature_relay_status, humidity_relay_status = control()
+        
         thread = Thread(target=read_and_log_data)
         thread.start()
         temperature, humidity = read_sensor_data()
+        last_relay_on = eggTurner()
+        temperature_relay_status, humidity_relay_status = control()
         
         # Fetch the data from the MongoDB collection
         
