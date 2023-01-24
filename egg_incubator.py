@@ -129,7 +129,6 @@ def read_and_log_data():
     try:
         while True:
             last_relay_on = eggTurner()
-            temperature_relay_status, humidity_relay_status = control()
             temperature, humidity = read_sensor_data()
             if dataLogged is None:
                 dataLogged = datetime.now()
