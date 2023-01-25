@@ -236,13 +236,11 @@ def update_settings():
     elif variable == 'humidity_threshold':
         humidity_threshold = int(value)
     elif variable == 'log_interval':
-        log_interval = int(value)
+        log_interval = int(value)*60
     elif variable == 'relay_interval':
-        relay_interval = int(value)
+        relay_interval = int(value)*60*60
     elif variable == 'roll_interval':
-        roll_interval = int(value)
-    elif variable == 'roll_interval':
-        roll_interval = int(value)
+        roll_interval = int(value)*60
     elif variable == 'start_date':
         date = datetime.strptime(value, '%m/%d/%Y')
         start_date = datetime(date.year,date.month,date.day)

@@ -40,22 +40,22 @@
             </tr>
             <tr>
               <td>Log Interval</td>
-              <td>{{ data.log_interval }} seconds</td>
+              <td>{{ data.log_interval/60 }} minutes</td>
               <td><button class="update-button" onclick="updateValue('log_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Relay Interval</td>
-              <td>{{ divmod(data.relay_interval,3600) | join(':') }} Hours</td> 
+              <td>{{ data.relay_interval /60/60 }} hours</td>
               <td><button class="update-button" onclick="updateValue('relay_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Roll Interval</td>
-              <td>{{ data.roll_interval }} seconds</td>
+              <td>{{ data.roll_interval/60 }} minutes</td>
               <td><button class="update-button" onclick="updateValue('roll_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Temperature Threshold</td>
-              <td>{{ data.temperature_threshold }} F</td>
+              <td>{{ data.temperature_threshold }}F</td>
               <td><button class="update-button" onclick="updateValue('temperature_threshold')">Update</button></td>
             </tr>
             <tr>
