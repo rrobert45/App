@@ -150,7 +150,15 @@ def read_and_log_data():
         GPIO.cleanup()
         # Close the MongoDB connection
         client.close()
+        update_config()
 
+
+def update_config(variable, value):
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+        config[variable] = value
+    with open("config.json", "w") as config_file:
+        json.dump(config, config_file)
 
 
 
