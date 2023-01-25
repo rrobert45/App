@@ -242,7 +242,7 @@ def update_settings():
         date = datetime.strptime(value, '%m/%d/%Y')
         start_date = datetime(date.year,date.month,date.day)
         formatted_date = date.strftime('%Y-%m-%d')
-        update_config(start_date, formatted_date)
+        update_config("start_date", formatted_date)
     return jsonify({'status': 'success'})
 
 
