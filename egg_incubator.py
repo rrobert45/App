@@ -7,15 +7,30 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 import json
 
-
 with open('config.json') as config_file:
     config = json.load(config_file)
 
-sensor = config['sensor']
-pin = config['pin']
-egg_turner_relay_pin = config['egg_turner_relay_pin']
-heat_relay_pin = config['heat_relay_pin']
-humidifier_relay_pin = config['humidifier_relay_pin']
+start_date = datetime.strptime(config['start_date'], '%Y-%m-%d')
+
+# Connect to MongoDB
+uri = config['uri']
+client = MongoClient(uri)
+db = client[config['database']]
+incubator = db[config['collection']]
+
+
+app = Flask(__name__, static_folder='static')
+
+# Set the sensor type (DHT22) and the GPIO pin number
+sensor = Adafruit_DHT.DHT22
+pin = 4
+
+# Set the relay pin number
+egg_turner_relay_pin = 17
+heat_relay_pin = 18
+humidifier_relay_pin = 19
+
+# Set the interval for logging data and turning on the relay (in seconds)
 log_interval = config['log_interval']
 relay_interval = config['relay_interval']
 roll_interval = config['roll_interval']
@@ -25,13 +40,11 @@ eggPin = config['eggPin']
 temperature_relay_status = config['temperature_relay_status']
 humidity_relay_status = config['humidity_relay_status']
 day_in_cycle = config['day_in_cycle']
-start_date = datetime.strptime(config['start_date'], '%Y-%m-%d')
-temperature_threshold = config['temperature_threshold']
-humidity_threshold = config['humidity_threshold']
-uri = config['uri']
-client = MongoClient(uri)
-db = client[config['database']]
-incubator = db[config['collection']]
+start_date = datetime(2023, 1, 20)
+
+# Set the temperature and humidity thresholds
+temperature_threshold = 100
+humidity_threshold = 50
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -39,7 +52,7 @@ GPIO.setup(heat_relay_pin, GPIO.OUT)
 GPIO.setup(humidifier_relay_pin, GPIO.OUT)
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 
-app = Flask(__name__, static_folder='static')
+
 
 
 def read_sensor_data():
@@ -150,15 +163,7 @@ def read_and_log_data():
         GPIO.cleanup()
         # Close the MongoDB connection
         client.close()
-        update_config()
 
-
-def update_config(variable, value):
-    with open("config.json", "r") as config_file:
-        config = json.load(config_file)
-        config[variable] = value
-    with open("config.json", "w") as config_file:
-        json.dump(config, config_file)
 
 
 
