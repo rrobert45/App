@@ -1,77 +1,44 @@
 body {
-  background-color: #1d1d1d;
-  color: white;
-  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #ddd;
+  font-family: 'Open Sans', sans-serif;
 }
 
-h1 {
-  text-align: center;
-  color: #39ff14;
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #006400;
 }
 
-/* Navigation Bar */
-nav {
-  background-color: #1d1d1d;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px 20px;
-}
-
-nav a {
-  color: white;
+/* Links */
+a {
+  color: #006400;
   text-decoration: none;
-  padding: 10px;
 }
 
-nav a:hover {
-  background-color: #39ff14;
-  color: black;
+a:hover {
+  color: #ddd;
 }
 
-/* Settings Page */
-.settings {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-}
-
-.settings table {
-  width: 100%;
+/* Table */
+table {
   border-collapse: collapse;
+  width: 100%;
+  margin: 30px 0;
+  background-color: #1b1b1b;
 }
 
-.settings th, .settings td {
-  border: 1px solid #39ff14;
+th, td {
+  border: 1px solid #333;
   padding: 8px;
   text-align: left;
 }
 
-.settings th {
-  background-color: #39ff14;
-  color: black;
+th {
+  background-color: #006400;
+  color: #fff;
 }
 
-.settings .update-button {
-  background-color: #39ff14;
-  color: black;
-  border: none;
-  padding: 8px;
-}
-
-/* Historical Data Page */
-.historical-data {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 20px;
-}
-
-.historical-data table {
-  width: 100%;
-  border-collapse: collapse;
+td {
+  background-color: #333;
+  color: #ddd;
 }
