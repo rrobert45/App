@@ -40,17 +40,17 @@
             </tr>
             <tr>
               <td>How often data should be logged</td>
-              <td>{{ Math.round(data.log_interval/60)/1 }} minutes</td>
+              <td>{{ int(data.log_interval/60) }} minutes</td>
               <td><button class="update-button" onclick="updateValue('log_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Time Between rolling Eggs</td>
-              <td>{{ Math.round(data.relay_interval /60/60)/1  }} hours</td>
+              <td>{{ int(data.relay_interval /60/60) }} hours</td>
               <td><button class="update-button" onclick="updateValue('relay_interval')">Update</button></td>
             </tr>
             <tr>
               <td>Egg Roll Time</td>
-              <td>{{ Math.round(data.roll_interval/60)/1 }} minutes</td>
+              <td>{{ int(data.roll_interval/60) }} minutes</td>
               <td><button class="update-button" onclick="updateValue('roll_interval')">Update</button></td>
             </tr>
             <tr>
