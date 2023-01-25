@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, render_template,request, jsonify 
+from flask import Flask, render_template,request, jsonify,redirect 
 import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
@@ -232,7 +232,7 @@ def update_settings():
         start_date = datetime(date.year,date.month,date.day)
         
         
-    return jsonify({'status': 'success'})
+    return jsonify({'status': 'success'}), redirect("/")
 
 
 if __name__ == "__main__":
