@@ -51,6 +51,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(heat_relay_pin, GPIO.OUT)
 GPIO.setup(humidifier_relay_pin, GPIO.OUT)
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
+GPIO.setwarnings(False)
 
 
 
