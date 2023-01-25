@@ -40,7 +40,7 @@ eggPin = config['eggPin']
 temperature_relay_status = config['temperature_relay_status']
 humidity_relay_status = config['humidity_relay_status']
 day_in_cycle = config['day_in_cycle']
-start_date = datetime(2023, 1, 20)
+
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
