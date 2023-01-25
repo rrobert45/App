@@ -177,9 +177,21 @@ def read_and_log_data():
         client.close()
         
 
-@app.route('/historical_data')
-def historical_data():
-        cursor = incubator.find().sort("Time", -1)
+
+
+
+@app.route("/")
+def index():
+        day_in_cycle = day()
+        thread = Thread(target=read_and_log_data)
+        thread.start()
+        temperature, humidity = read_sensor_data()
+        last_relay_on = eggTurner()
+        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
+        
+        
+        # Fetch the data from the MongoDB collection
+        cursor = incubator.find().limit(48).sort("Time", -1)
         historical_data = []
         for data in cursor:
             historical_data.append({
@@ -191,49 +203,13 @@ def historical_data():
                 'Last Egg Turn': data['Last Egg Turn'],
                 'Day in Egg Cycle' : data['Day in Egg Cycle']
             })
-        data ={
-            'historical_data': historical_data,
-        }
-        return render_template('historical_data.html', data=data)
-
-
-
-@app.route("/settings")
-def settings():
-    temperature, humidity = read_sensor_data()
-    last_relay_on = eggTurner()
-    last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
-    data = {
-            'log_interval': log_interval,
-            'relay_interval': relay_interval,
-            'roll_interval': roll_interval,
-            'temperature_threshold': temperature_threshold,
-            'humidity_threshold': humidity_threshold,
-            'temperature': temperature,
-            'humidity': humidity,
-            'last_relay_on': last_relay_on,
-            'temperature_relay_status': temperature_relay_status,
-            'humidity_relay_status': humidity_relay_status,
-            'day_in_cycle': day_in_cycle,
-            'start_date': start_date.strftime("%m-%d-%Y")
-        }
-    return render_template("settings.html", data=data)
-
-@app.route("/")
-def index():
-        day_in_cycle = day()
-        thread = Thread(target=read_and_log_data)
-        thread.start()
-        temperature, humidity = read_sensor_data()
-        last_relay_on = eggTurner()
-        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
-             
         data = {
             'log_interval': log_interval,
             'relay_interval': relay_interval,
             'roll_interval': roll_interval,
             'temperature_threshold': temperature_threshold,
             'humidity_threshold': humidity_threshold,
+            'historical_data': historical_data,
             'temperature': temperature,
             'humidity': humidity,
             'last_relay_on': last_relay_on,
