@@ -191,7 +191,10 @@ def historical_data():
                 'Last Egg Turn': data['Last Egg Turn'],
                 'Day in Egg Cycle' : data['Day in Egg Cycle']
             })
-        return render_template('historical_data.html', data=historical_data)
+        data ={
+            'historical_data': historical_data,
+        }
+        return render_template('historical_data.html', data=data)
 
 
 
