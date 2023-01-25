@@ -1,47 +1,37 @@
-import pandas as pd
 from flask import Flask, render_template,request, jsonify,redirect 
 import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
-import os
+
 from pymongo import MongoClient
 from datetime import datetime, timedelta
+import json
 
-# Connect to MongoDB
-uri = "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority"
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+sensor = config['sensor']
+pin = config['pin']
+egg_turner_relay_pin = config['egg_turner_relay_pin']
+heat_relay_pin = config['heat_relay_pin']
+humidifier_relay_pin = config['humidifier_relay_pin']
+log_interval = config['log_interval']
+relay_interval = config['relay_interval']
+roll_interval = config['roll_interval']
+last_relay_on = config['last_relay_on']
+dataLogged = config['dataLogged']
+eggPin = config['eggPin']
+temperature_relay_status = config['temperature_relay_status']
+humidity_relay_status = config['humidity_relay_status']
+day_in_cycle = config['day_in_cycle']
+start_date = datetime.strptime(config['start_date'], '%Y-%m-%d')
+temperature_threshold = config['temperature_threshold']
+humidity_threshold = config['humidity_threshold']
+uri = config['uri']
 client = MongoClient(uri)
-db = client.EggApp
-incubator = db.incubator
-
-print(os.getcwd())
-
-app = Flask(__name__, static_folder='static')
-
-# Set the sensor type (DHT22) and the GPIO pin number
-sensor = Adafruit_DHT.DHT22
-pin = 4
-
-# Set the relay pin number
-egg_turner_relay_pin = 17
-heat_relay_pin = 18
-humidifier_relay_pin = 19
-
-# Set the interval for logging data and turning on the relay (in seconds)
-log_interval = 30 # 15 minutes time between logging data to the database 
-relay_interval = 60*60*2 # 2 hours between turning the eggs
-roll_interval = 3*60 #how long to turn the eggs
-last_relay_on = None
-dataLogged = None
-eggPin = 0
-temperature_relay_status = ""
-humidity_relay_status = ""
-day_in_cycle = ""
-start_date = datetime(2023, 1, 20)
-
-# Set the temperature and humidity thresholds
-temperature_threshold = 100
-humidity_threshold = 50
+db = client[config['database']]
+incubator = db[config['collection']]
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)

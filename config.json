@@ -1,13 +1,23 @@
 {
-    "uri": "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority",
-    "log_interval": 900,
+    "sensor_type": "Adafruit_DHT.DHT22",
+    "GPIO_pin": 4,
+    "relay_pins": {
+    "egg_turner_relay_pin": 17,
+    "heat_relay_pin": 18,
+    "humidifier_relay_pin": 19
+    },
+    "intervals": {
+    "log_interval": 30,
     "relay_interval": 7200,
-    "roll_interval": 180,
-    "pin": 4,
-    "humidity_relay": 19,
-    "temperature_relay": 18,
-    "roller_relay":17,
-    "email_address": "example@email.com",
-    "email_password": "password",
-    "start_date": "01/23/2023 1:00pm"
-}
+    "roll_interval": 180
+    },
+    "thresholds": {
+    "temperature_threshold": 100,
+    "humidity_threshold": 50
+    },
+    "mongodb_uri": "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority",
+    "database_name": "EggApp",
+    "collection_name": "incubator",
+    "flask_static_folder": "static",
+    "start_date": "2023-01-20"
+    }
