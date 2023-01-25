@@ -1989,7 +1989,7 @@ pre code {
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #212529
+  color: #ffffff
 }
 
 .table td,
@@ -2914,9 +2914,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff
-}
+  background-color: #438d0B;
+  border-color: #000}
 
 .btn-primary:hover {
   color: #fff;
@@ -5256,7 +5255,7 @@ input[type=submit].btn-block {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: rgb(0, 0, 0);
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, .125);
   border-radius: .25rem
@@ -8867,7 +8866,7 @@ button.bg-dark:hover {
 }
 
 .shadow {
-  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important
+  box-shadow: 0 .5rem 1rem rgba(4, 135, 135, .16) !important
 }
 
 .shadow-lg {
@@ -11253,7 +11252,7 @@ button.bg-dark:hover {
 }
 
 .text-primary {
-  color: #007bff !important
+  color: #2d721b !important
 }
 
 a.text-primary:focus,
