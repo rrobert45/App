@@ -5,11 +5,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="dark-theme">
-    <div class="navbar">
-        <a href="{{url_for('index')}}">Home</a>
-        <a href="{{url_for('settings')}}">Settings</a>
-        <a href="{{url_for('historical_data')}}">Historical Data</a>
-      </div>
+    {% include 'navbar.html' %}
+
     <h1>Historical Data</h1>
     <table>
         <tr>
