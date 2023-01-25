@@ -3,10 +3,10 @@ import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
-
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import json
+
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -39,7 +39,7 @@ GPIO.setup(heat_relay_pin, GPIO.OUT)
 GPIO.setup(humidifier_relay_pin, GPIO.OUT)
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 
-
+app = Flask(__name__, static_folder='static')
 
 
 def read_sensor_data():
