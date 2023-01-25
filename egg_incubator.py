@@ -72,7 +72,7 @@ def read_sensor_data():
 def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status,day_in_cycle):
     # Create a data dictionary
     data = {
-        'Time': time.strftime("%m-%d-%Y %I:%M %p"),
+        'Time': time.strftime("%m-%d-%Y %H:%M %p"),
         'Temperature(F)': temperature,
         'Temperature Relay Status': temperature_relay_status,
         'Humidity(%)': humidity,
