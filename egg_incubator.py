@@ -7,7 +7,6 @@ from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
 import json
-from jinja2 import Template
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -72,7 +71,7 @@ def read_sensor_data():
 def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status,day_in_cycle):
     # Create a data dictionary
     data = {
-        'Time': time.strftime("%m-%d-%Y %H:%M %p"),
+        'Time': time.strftime("%m-%d-%Y %H:%M"),
         'Temperature(F)': temperature,
         'Temperature Relay Status': temperature_relay_status,
         'Humidity(%)': humidity,
@@ -104,7 +103,9 @@ def eggTurner():
                 GPIO.output(egg_turner_relay_pin, GPIO.LOW)
                 eggPin = 0
 
-    
+    return last_relay_on
+
+
 def control():
     temperature, humidity = read_sensor_data()
     global temperature_relay_status
@@ -186,7 +187,7 @@ def index():
         thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
-        last_relay_on = last_relay_on.strftime("%m-%d-%Y %H:%M %P")
+        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
         
         
         # Fetch the data from the MongoDB collection
