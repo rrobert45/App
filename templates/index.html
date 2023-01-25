@@ -145,7 +145,45 @@
             </div>
         </div>
     </div>
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Historical Data (Last 48)</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Temperature (F)</th>
+                                    <th>Humidity(%)</th>
+                                    <th>Temperature Relay Status</th>
+                                    <th>Humidity Relay Status</th>
+                                    <th>Last Egg Turn</th>
+                                    <th>Day in Egg Cycle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in data.historical_data %}
+                                <tr>
+                                    <td>{{ data.Time }}</td>
+                                    <td>{{ data["Temperature(F)"] }}</td>
+                                    <td>{{ data["Humidity(%)"] }}</td>
+                                    <td>{{ data["Temperature Relay Status"] }}</td>
+                                    <td>{{ data["Humidity Relay Status"] }}</td>
+                                    <td>{{ data["Last Egg Turn"] }}</td>
+                                    <td>{{ data["Day in Egg Cycle"] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
