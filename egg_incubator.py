@@ -7,6 +7,7 @@ from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
 import json
+from jinja2 import Template
 
 with open('config.json') as config_file:
     config = json.load(config_file)
