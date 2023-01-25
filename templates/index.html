@@ -30,6 +30,11 @@
         </script>
 </head>
 <body class="dark-theme">
+    <div class="navbar">
+        <a href="{{url_for('index')}}">Home</a>
+        <a href="{{url_for('settings')}}">Settings</a>
+        <a href="{{url_for('historical_data')}}">Historical Data</a>
+      </div>
     <div class="settings">
         <h1>Settings</h1>
         <table>
@@ -93,33 +98,7 @@
     </table>
 </div> 
 </div>
-  <div class="data-table">
-    <h1>Historical Data (Last 48)</h1>
-    <table>
-      <tr>
-        <th>Time</th>
-        <th>Temperature (F)</th>
-        <th>Humidity(%)</th>
-        <th>Temperature Relay Status</th>
-        <th>Humidity Relay Status</th>
-        <th>Last Egg Turn</th>
-        <th>Day in Egg Cycle</th>
-      </tr>
-      {% for data in data.historical_data %}
-          <tr>
-            <td>{{ data.Time }}</td>
-            <td>{{ data["Temperature(F)"] }}</td>
-            <td>{{ data["Humidity(%)"] }}</td>
-            <td>{{ data["Temperature Relay Status"] }}</td>
-            <td>{{ data["Humidity Relay Status"] }}</td>
-            <td>{{ data["Last Egg Turn"] }}</td>
-            <td>{{ data["Day in Egg Cycle"] }}</td>
-
-            
-          </tr>
-      {% endfor %}
-  </table>
-  </div>
+  
 </body>
 </html>
 
