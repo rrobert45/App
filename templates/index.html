@@ -45,7 +45,7 @@
             </tr>
             <tr>
               <td>Relay Interval</td>
-              <td>{{ data.relay_interval }} seconds</td>
+              <td>{{ divmod(data.relay_interval,3600) | join(':') }} Hours</td> 
               <td><button class="update-button" onclick="updateValue('relay_interval')">Update</button></td>
             </tr>
             <tr>
