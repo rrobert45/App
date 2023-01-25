@@ -3,59 +3,32 @@
 <head>
     <title>Temperature and Humidity Monitor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function updateValue(variable) {
-                let newValue = null;
-                if(variable == "start_date") {
-                    if(confirm("Updating start date will also clear the historical data. Are you sure you want to continue?")) {
-                        newValue = prompt("Enter the new value for " + variable);
-                    }
-                } else {
-                    newValue = prompt("Enter the new value for " + variable);
-                }
-                if (newValue != null) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/update_settings',
-                        data: JSON.stringify({ variable: variable, value: newValue }),
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        success: function (response) {
-                            alert('Successfully updated ' + variable + ' to ' + newValue);
-                        }
-                    });
-                }
-            }
-        </script>
 </head>
 <body class="dark-theme">
     {% include 'navbar.html' %}  
-  <div class="current-data">
-    <h1>Current Data</h1>
-    <table>
-        <tr>
-            <th>Temperature (F)</th>
-            <th>Temperature Relay Status</th>            
-            <th>Humidity (%)</th>
-            <th>Humidity Relay Status</th>
-            <th>Last Egg Turn</th>
-            <th>Day in Egg Cycle</th>
-
-        </tr>
-        <tr>
-            <td>{{ data.temperature }}</td>
-            <td>{{ data.temperature_relay_status }}</td>
-            <td>{{ data.humidity }}</td>
-            <td>{{ data.humidity_relay_status }}</td>
-            <td>{{ data.last_relay_on }}</td>
-            <td>{{ data.day_in_cycle }}</td>
-        </tr>
-    </table>
-</div> 
+    <div class="data-container">
+    <div class="data-box">
+        <h1>Current Data</h1>
+        <div>
+            <label>Temperature (F): </label><span>{{ data.temperature }}</span>
+        </div>
+        <div>
+            <label>Temperature Relay Status: </label><span>{{ data.temperature_relay_status }}</span>
+        </div>
+        <div>
+            <label>Humidity (%): </label><span>{{ data.humidity }}</span>
+        </div>
+        <div>
+            <label>Humidity Relay Status: </label><span>{{ data.humidity_relay_status }}</span>      
+        </div>
+        <div>
+            <label>Last Egg Turn: </label><span>{{ data.last_relay_on }}</span>
+        </div>
+        <div>
+            <label>Day in Egg Cycle: </label><span>{{ data.day_in_cycle }}</span>
+        </div>
+    </div>
 </div>
-  
+
 </body>
 </html>
-
-
