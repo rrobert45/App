@@ -169,7 +169,7 @@ def read_and_log_data():
         GPIO.cleanup()
         # Close the MongoDB connection
         client.close()
-        update_config()
+        
 
 
 
@@ -240,9 +240,8 @@ def update_settings():
     elif variable == 'start_date':
         date = datetime.strptime(value, '%m/%d/%Y')
         start_date = datetime(date.year,date.month,date.day)
-        
-        
-    return redirect("/")
+        update_config() 
+    return jsonify({'status': 'success'})
 
 
 if __name__ == "__main__":
