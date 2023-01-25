@@ -40,7 +40,7 @@
             </tr>
             <tr>
               <td>How often data should be logged</td>
-              <td>{{ data.log_interval/60 |round(0)}} minutes</td>
+              <td>{{int(round(data.log_interval/60))}} minutes</td>
               <td><button class="update-button" onclick="updateValue('log_interval')">Update</button></td>
             </tr>
             <tr>
