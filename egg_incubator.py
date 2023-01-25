@@ -135,7 +135,13 @@ def day():
     if day_in_cycle >= 18:
         humidity_threshold = 70
     return day_in_cycle
-    
+
+def update_config(variable, value):
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+        config[variable] = value
+    with open("config.json", "w") as config_file:
+        json.dump(config, config_file)   
 
 def read_and_log_data():
     global dataLogged
@@ -163,6 +169,7 @@ def read_and_log_data():
         GPIO.cleanup()
         # Close the MongoDB connection
         client.close()
+        update_config()
 
 
 
