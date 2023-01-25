@@ -4,6 +4,7 @@ import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
 from pymongo import MongoClient
+import pymongo
 from datetime import datetime, timedelta
 import json
 
@@ -142,7 +143,11 @@ def update_config(variable, value):
         config = json.load(config_file)
         config[variable] = value
     with open("config.json", "w") as config_file:
-        json.dump(config, config_file)   
+        json.dump(config, config_file) 
+
+def clear_database():
+    incubator.drop()
+
 
 def read_and_log_data():
     global dataLogged
@@ -243,6 +248,7 @@ def update_settings():
         start_date = datetime(date.year,date.month,date.day)
         formatted_date = date.strftime('%Y-%m-%d')
         update_config('start_date', formatted_date)
+        clear_database()
     return jsonify({'status': 'success'})
 
 

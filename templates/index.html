@@ -6,20 +6,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function updateValue(variable) {
-            let newValue = prompt("Enter the new value for " + variable);
-            if (newValue != null) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/update_settings',
-                    data: JSON.stringify({ variable: variable, value: newValue }),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (response) {
-                        alert('Successfully updated ' + variable + ' to ' + newValue);
+                let newValue = null;
+                if(variable == "start_date") {
+                    if(confirm("Updating start date will also clear the historical data. Are you sure you want to continue?")) {
+                        newValue = prompt("Enter the new value for " + variable);
                     }
-                });
+                } else {
+                    newValue = prompt("Enter the new value for " + variable);
+                }
+                if (newValue != null) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/update_settings',
+                        data: JSON.stringify({ variable: variable, value: newValue }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (response) {
+                            alert('Successfully updated ' + variable + ' to ' + newValue);
+                        }
+                    });
+                }
             }
-        }
         </script>
 </head>
 <body class="dark-theme">
