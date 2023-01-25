@@ -4,7 +4,7 @@
     "egg_turner_relay_pin": 17,
     "heat_relay_pin": 18,
     "humidifier_relay_pin": 19,
-    "log_interval": 30,
+    "log_interval": 900,
     "relay_interval": 7200,
     "roll_interval": 180,
     "last_relay_on": null,
