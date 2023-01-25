@@ -6,29 +6,22 @@
 </head>
 <body class="dark-theme">
     {% include 'navbar.html' %}  
-    <div class="data-container">
+  <div class="data-container">
+    <h1>Current Data</h1>
     <div class="data-box">
-        <h1>Current Data</h1>
-        <div>
-            <label>Temperature (F): </label><span>{{ data.temperature }}</span>
-        </div>
-        <div>
-            <label>Temperature Relay Status: </label><span>{{ data.temperature_relay_status }}</span>
-        </div>
-        <div>
-            <label>Humidity (%): </label><span>{{ data.humidity }}</span>
-        </div>
-        <div>
-            <label>Humidity Relay Status: </label><span>{{ data.humidity_relay_status }}</span>      
-        </div>
-        <div>
-            <label>Last Egg Turn: </label><span>{{ data.last_relay_on }}</span>
-        </div>
-        <div>
-            <label>Day in Egg Cycle: </label><span>{{ data.day_in_cycle }}</span>
-        </div>
+        <p>Temperature (F): {{ data.temperature }}</p>
+        <p>Temperature Relay Status: {{ data.temperature_relay_status }}</p>    
     </div>
+    <div class="data-box">
+        <p>Humidity (%): {{ data.humidity }}</p>
+        <p>Humidity Relay Status: {{ data.humidity_relay_status }}</p>
+    </div>
+    <div class="data-box">
+        <p>Last Egg Turn: {{ data.last_relay_on }}</p>
+        <p>Day in Egg Cycle: {{ data.day_in_cycle }}</p>
+    </div>
+</div> 
 </div>
-
+  
 </body>
 </html>
