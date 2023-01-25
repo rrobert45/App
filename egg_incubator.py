@@ -232,7 +232,7 @@ def update_settings():
         start_date = datetime(date.year,date.month,date.day)
         
         
-    return jsonify({'status': 'success'}), redirect("/")
+    return redirect("/")
 
 
 if __name__ == "__main__":
