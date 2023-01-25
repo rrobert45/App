@@ -104,9 +104,7 @@ def eggTurner():
                 GPIO.output(egg_turner_relay_pin, GPIO.LOW)
                 eggPin = 0
 
-    return last_relay_on
-
-
+    
 def control():
     temperature, humidity = read_sensor_data()
     global temperature_relay_status
