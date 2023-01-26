@@ -2,7 +2,7 @@ from flask import Flask, render_template,request, jsonify,redirect
 import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
-import threading
+from threading import Thread
 from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
@@ -203,7 +203,6 @@ def read_and_log_data():
 @app.route("/")
 def index():
         day_in_cycle = day()
-
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -270,5 +269,6 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    threading.Thread(target=read_and_log_data).start()
+    thread = Thread(target=read_and_log_data)
+    thread.start()
     app.run(debug=True, host='0.0.0.0')
