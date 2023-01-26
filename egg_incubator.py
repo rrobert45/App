@@ -3,6 +3,7 @@ import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
+import asyncio
 from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
@@ -269,7 +270,6 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    thread = Thread(target=read_and_log_data)
-    thread.start()
+    asyncio.create_task(read_and_log_data())
     app.run(debug=True, host='0.0.0.0')
-    thread.join()
+    asyncio.run(asyncio.gather(task))
