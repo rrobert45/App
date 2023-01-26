@@ -270,5 +270,5 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    asyncio.create_task(read_and_log_data())
+    asyncio.run(read_and_log_data())
     app.run(debug=True, host='0.0.0.0')
