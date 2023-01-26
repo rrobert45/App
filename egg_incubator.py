@@ -10,7 +10,7 @@ import json
 import asyncio
 from asgiref.wsgi import WsgiToAsgi
 
-asgi = WsgiToAsgi(app)
+
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -25,6 +25,7 @@ incubator = db[config['collection']]
 
 
 app = Flask(__name__, static_folder='static')
+asgi = WsgiToAsgi(app)
 
 # Set the sensor type (DHT22) and the GPIO pin number
 sensor = Adafruit_DHT.DHT22
