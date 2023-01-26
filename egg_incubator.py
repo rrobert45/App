@@ -137,12 +137,14 @@ def humidity_control():
         GPIO.setup(humidifier_relay_pin, GPIO.IN)
         print(GPIO.input(humidifier_relay_pin))
         humidity_relay_status = "ON"
+        print(humidity < humidity_threshold)
     else:
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
         GPIO.setup(humidifier_relay_pin, GPIO.IN)
         print(GPIO.input(humidifier_relay_pin))
         humidity_relay_status = "OFF"
+        print(humidity < humidity_threshold)
     
 
 def day():
