@@ -49,8 +49,7 @@ humidity_threshold = 50
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(heat_relay_pin, GPIO.OUT)
-GPIO.setup(humidifier_relay_pin, GPIO.OUT)
+
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 GPIO.setup(20, GPIO.OUT)
 GPIO.output(20, GPIO.HIGH)
@@ -108,26 +107,41 @@ def eggTurner():
     return last_relay_on
 
 
-def control():
+def temperature_control():
+    GPIO.setup(heat_relay_pin, GPIO.OUT)
     temperature, humidity = read_sensor_data()
     global temperature_relay_status
-    global humidity_relay_status
+   
     if temperature < temperature_threshold:
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
         temperature_relay_status = "ON"
+        GPIO.setup(heat_relay_pin, GPIO.IN)
+        print(GPIO.input(heat_relay_pin))
     else:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
         temperature_relay_status = "OFF"
-    # Check if the humidity is above the threshold
+        GPIO.setup(heat_relay_pin, GPIO.IN)
+        print(GPIO.input(heat_relay_pin))
+    
+
+def humidity_control():
+    GPIO.setup(humidifier_relay_pin, GPIO.OUT)
+    temperature, humidity = read_sensor_data()
+    global humidity_relay_status
+    # Check if the humidity is below the threshold
     if humidity < humidity_threshold:
-        # Turn off the humidifier
+        # Turn on the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
+        GPIO.setup(humidifier_relay_pin, GPIO.IN)
+        print(GPIO.input(humidifier_relay_pin))
         humidity_relay_status = "ON"
     else:
-        # Turn on the humidifier
+        # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
+        GPIO.setup(humidifier_relay_pin, GPIO.IN)
+        print(GPIO.input(humidifier_relay_pin))
         humidity_relay_status = "OFF"
     
 
@@ -156,7 +170,8 @@ def read_and_log_data():
     try:
         while True:
             day_in_cycle = day()
-            control()
+            temperature_control()
+            humidity_control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
             if dataLogged is None:
@@ -167,8 +182,7 @@ def read_and_log_data():
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
                
-            
-            time.sleep(10)
+            time.sleep(20)
             
     except KeyboardInterrupt:
         pass
