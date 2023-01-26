@@ -186,7 +186,7 @@ def read_and_log_data():
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
                
             print("Hey! I'm running in a loop!")
-            time.sleep(10)
+            time.sleep(20)
             
     except KeyboardInterrupt:
         pass
