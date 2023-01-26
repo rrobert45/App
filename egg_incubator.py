@@ -45,7 +45,7 @@ day_in_cycle = config['day_in_cycle']
 
 # Set the temperature and humidity thresholds
 temperature_threshold = 100
-humidity_threshold = 50
+humidity_threshold = 100
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
