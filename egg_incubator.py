@@ -202,9 +202,8 @@ async def read_and_log_data():
 
 
 @app.route("/")
-async def index():
+def index():
         day_in_cycle = day()
-        task = asyncio.create_task(read_and_log_data())
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -271,4 +270,5 @@ def update_settings():
 
 
 if __name__ == "__main__":
+    asyncio.create_task(read_and_log_data())
     app.run(debug=True, host='0.0.0.0')
