@@ -3,11 +3,11 @@ import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
-import asyncio
 from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
 import json
+import asyncio
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -170,7 +170,7 @@ def clear_database():
     incubator.drop()
 
 
-def read_and_log_data():
+async def read_and_log_data():
     global dataLogged
     try:
         while True:
@@ -186,8 +186,8 @@ def read_and_log_data():
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
                
-            print("Hey! I'm running in a loop!")
-            time.sleep(20)
+            
+            time.sleep(10)
             
     except KeyboardInterrupt:
         pass
@@ -202,8 +202,9 @@ def read_and_log_data():
 
 
 @app.route("/")
-def index():
+async def index():
         day_in_cycle = day()
+        asyncio.create_task(read_and_log_data())
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -270,6 +271,4 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    asyncio.create_task(read_and_log_data())
     app.run(debug=True, host='0.0.0.0')
-    asyncio.run(asyncio.gather(task))
