@@ -95,12 +95,12 @@ def eggTurner():
         if eggPin == 0:
             if current_time - last_relay_on >= timedelta(seconds=relay_interval):
                 # Turn on the relay for 2 minutes
-                GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
+                GPIO.output(egg_turner_relay_pin, GPIO.LOW)
                 eggPin = 1
                 last_relay_on = current_time
         elif eggPin == 1:        
             if current_time - last_relay_on >= timedelta(seconds=roll_interval):
-                GPIO.output(egg_turner_relay_pin, GPIO.LOW)
+                GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
                 eggPin = 0
 
     return last_relay_on
@@ -112,20 +112,20 @@ def control():
     global humidity_relay_status
     if temperature < temperature_threshold:
         # Turn on the heat source
-        GPIO.output(heat_relay_pin, GPIO.HIGH)
+        GPIO.output(heat_relay_pin, GPIO.LOW)
         temperature_relay_status = "ON"
     else:
         # Turn off the heat source
-        GPIO.output(heat_relay_pin, GPIO.LOW)
+        GPIO.output(heat_relay_pin, GPIO.HIGH)
         temperature_relay_status = "OFF"
     # Check if the humidity is above the threshold
     if humidity > humidity_threshold:
         # Turn off the humidifier
-        GPIO.output(humidifier_relay_pin, GPIO.LOW)
+        GPIO.output(humidifier_relay_pin, GPIO.HIGH)
         humidity_relay_status = "OFF"
     else:
         # Turn on the humidifier
-        GPIO.output(humidifier_relay_pin, GPIO.HIGH)
+        GPIO.output(humidifier_relay_pin, GPIO.LOW)
         humidity_relay_status = "ON"
     
 
