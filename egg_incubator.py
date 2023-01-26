@@ -37,7 +37,6 @@ relay_interval = config['relay_interval']
 roll_interval = config['roll_interval']
 last_relay_on = config['last_relay_on']
 dataLogged = config['dataLogged']
-eggPin = config['eggPin']
 temperature_relay_status = config['temperature_relay_status']
 humidity_relay_status = config['humidity_relay_status']
 day_in_cycle = config['day_in_cycle']
@@ -88,23 +87,19 @@ def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humid
 def eggTurner():
     current_time = datetime.now()
     global last_relay_on
-    global eggPin
     day_in_cycle = day()
     if day_in_cycle <18:
         if last_relay_on is None:
             last_relay_on = datetime.now()
-            eggPin = 0
-        if eggPin == 0:
+        if GPIO.input(egg_turner_relay_pin) == 1:
             if current_time - last_relay_on >= timedelta(seconds=relay_interval):
                 # Turn on the relay for 2 minutes
                 GPIO.output(egg_turner_relay_pin, GPIO.LOW)
-                eggPin = 1
                 last_relay_on = current_time
-        elif eggPin == 1:        
+        elif GPIO.input(egg_turner_relay_pin) == 0:        
             if current_time - last_relay_on >= timedelta(seconds=roll_interval):
                 GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
-                eggPin = 0
-
+                
     return last_relay_on
 
 
@@ -117,27 +112,37 @@ def control():
     if temperature < temperature_threshold:
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
-        temperature_relay_status = "ON"
+        if GPIO.input(heat_relay_pin) == 0:
+            temperature_relay_status = "ON"
+        else:
+            print("HEAT GPIO not setting to low or ON")
 
     else:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
-        temperature_relay_status = "OFF"
+        if GPIO.input(heat_relay_pin) == 1: 
+            temperature_relay_status = "OFF"
+        else:
+            print("HEAT GPIO not setting to High or OFF")
+
+
     # Check if the humidity is above the threshold
     if humidity < humidity_threshold:
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
-        humidity_relay_status = "ON"
+        if GPIO.input(humidifier_relay_pin) == 0:
+            humidity_relay_status = "ON"
+        else:
+            print("HUMIDITY GPIO not setting to low or ON")
         
-        state=GPIO.input(humidifier_relay_pin)
-        print(state)
+
     else:
-        # Turn on the humidifier
+        # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
-        humidity_relay_status = "OFF"
-        
-        state=GPIO.input(humidifier_relay_pin)
-        print(state)
+        if GPIO.input(humidifier_relay_pin) == 1:
+            humidity_relay_status = "OFF"
+        else:
+             print("HUMIDITY GPIO not setting to HIGH or OFF")
         
     
 
