@@ -272,3 +272,4 @@ if __name__ == "__main__":
     thread = Thread(target=read_and_log_data)
     thread.start()
     app.run(debug=True, host='0.0.0.0')
+    thread.join()
