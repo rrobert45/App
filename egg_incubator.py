@@ -29,7 +29,7 @@ pin = 4
 # Set the relay pin number
 egg_turner_relay_pin = 17
 heat_relay_pin = 18
-humidifier_relay_pin = 19
+humidifier_relay_pin = 26
 
 # Set the interval for logging data and turning on the relay (in seconds)
 log_interval = config['log_interval']
