@@ -7,10 +7,6 @@ from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
 import json
-import asyncio
-from asgiref.wsgi import WsgiToAsgi
-
-
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -25,7 +21,6 @@ incubator = db[config['collection']]
 
 
 app = Flask(__name__, static_folder='static')
-asgi = WsgiToAsgi(app)
 
 # Set the sensor type (DHT22) and the GPIO pin number
 sensor = Adafruit_DHT.DHT22
@@ -174,7 +169,7 @@ def clear_database():
     incubator.drop()
 
 
-async def read_and_log_data():
+def read_and_log_data():
     global dataLogged
     try:
         while True:
@@ -208,6 +203,8 @@ async def read_and_log_data():
 @app.route("/")
 def index():
         day_in_cycle = day()
+        thread = Thread(target=read_and_log_data)
+        thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -274,6 +271,4 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    asyncio.create_task(asgi(app, host='0.0.0.0', port=8000))
-    asyncio.create_task(read_and_log_data())
-    asyncio.get_event_loop().run_forever()
+    app.run(debug=True, host='0.0.0.0')
