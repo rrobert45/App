@@ -43,8 +43,8 @@ day_in_cycle = config['day_in_cycle']
 
 
 # Set the temperature and humidity thresholds
-temperature_threshold = 100
-humidity_threshold = 100
+temperature_threshold = 101
+humidity_threshold = 55
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -109,7 +109,9 @@ def control():
     
     global temperature_relay_status
     global humidity_relay_status
-    if temperature < temperature_threshold:
+
+    
+    if temperature <= (temperature_threshold - 1):
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
         if GPIO.input(heat_relay_pin) == 0:
@@ -117,17 +119,18 @@ def control():
         else:
             print("HEAT GPIO not setting to low or ON")
 
-    else:
+    elif temperature > temperature_threshold:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
         if GPIO.input(heat_relay_pin) == 1: 
             temperature_relay_status = "OFF"
         else:
             print("HEAT GPIO not setting to High or OFF")
+    
 
 
     # Check if the humidity is above the threshold
-    if humidity < humidity_threshold:
+    if humidity < (humidity_threshold-5):
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
         if GPIO.input(humidifier_relay_pin) == 0:
@@ -152,7 +155,7 @@ def day():
     total_days = 21
     day_in_cycle = (current_date - start_date).days % total_days
     if day_in_cycle >= 18:
-        humidity_threshold = 70
+        humidity_threshold = 75
     return day_in_cycle
 
 def update_config(variable, value):
