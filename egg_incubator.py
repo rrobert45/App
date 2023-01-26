@@ -50,7 +50,7 @@ humidity_threshold = 50
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(heat_relay_pin, GPIO.OUT)
-GPIO.setup(humidifier_relay_pin, GPIO.OUT)
+
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 GPIO.setup(20, GPIO.OUT)
 GPIO.output(20, GPIO.HIGH)
@@ -109,13 +109,16 @@ def eggTurner():
 
 
 def control():
+    global humidifier_relay_pin
     temperature, humidity = read_sensor_data()
+    GPIO.setup(humidifier_relay_pin, GPIO.OUT)
     global temperature_relay_status
     global humidity_relay_status
     if temperature < temperature_threshold:
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
         temperature_relay_status = "ON"
+
     else:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
@@ -125,10 +128,16 @@ def control():
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
         humidity_relay_status = "ON"
+        GPIO.setup(humidifier_relay_pin, GPIO.IN)
+        state=GPIO.input(humidifier_relay_pin)
+        print(state)
     else:
         # Turn on the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
         humidity_relay_status = "OFF"
+        GPIO.setup(humidifier_relay_pin, GPIO.IN)
+        state=GPIO.input(humidifier_relay_pin)
+        print(state)
         
     
 
