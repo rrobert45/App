@@ -8,6 +8,9 @@ import pymongo
 from datetime import datetime, timedelta
 import json
 import asyncio
+from asgiref.wsgi import WsgiToAsgi
+
+asgi = WsgiToAsgi(app)
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -270,5 +273,6 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    asyncio.run(read_and_log_data())
-    app.run(debug=True, host='0.0.0.0')
+    asyncio.create_task(asgi(app, host='0.0.0.0', port=8000))
+    asyncio.create_task(read_and_log_data())
+    asyncio.get_event_loop().run_forever()
