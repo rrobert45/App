@@ -190,11 +190,6 @@ def read_and_log_data():
             
     except KeyboardInterrupt:
         pass
-    finally:
-        # Clean up the GPIO pins
-        GPIO.cleanup()
-        # Close the MongoDB connection
-        client.close()
         
 
 
@@ -270,6 +265,15 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    thread = Thread(target=read_and_log_data)
-    thread.start()
-    app.run(debug=True, host='0.0.0.0')
+    try:
+        thread = Thread(target=read_and_log_data)
+        thread.start()
+        app.run(debug=True, host='0.0.0.0')
+            
+    except KeyboardInterrupt:
+        pass
+    finally:
+        # Clean up the GPIO pins
+        GPIO.cleanup()
+        # Close the MongoDB connection
+        client.close()
