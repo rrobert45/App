@@ -97,6 +97,7 @@ def log_data(temperature, humidity, last_relay_on, temperature_relay_status,
 
 
 def eggTurner():
+    global egg_turner_relay_pin
     current_time = datetime.now()
     global last_relay_on
     day_in_cycle = day()
