@@ -6,7 +6,7 @@
     "humidifier_relay_pin": 26,
     "log_interval": 900,
     "relay_interval": 7200,
-    "roll_interval": 180,
+    "roll_interval": 120,
     "last_relay_on": null,
     "dataLogged": null,
     "temperature_relay_status": "",
