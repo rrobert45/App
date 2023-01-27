@@ -199,7 +199,8 @@ def read_and_log_data():
 @app.route("/")
 def index():
         day_in_cycle = day()
-
+        thread = Thread(target=read_and_log_data)
+        thread.start()
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -266,8 +267,6 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    thread = Thread(target=read_and_log_data)
-    thread.start()
     app.run(debug=True, host='0.0.0.0')
             
    
