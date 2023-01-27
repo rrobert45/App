@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template,request, jsonify,redirect 
 import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
@@ -18,6 +18,7 @@ uri = config['uri']
 client = MongoClient(uri)
 db = client[config['database']]
 incubator = db[config['collection']]
+
 
 app = Flask(__name__, static_folder='static')
 
@@ -40,6 +41,7 @@ temperature_relay_status = config['temperature_relay_status']
 humidity_relay_status = config['humidity_relay_status']
 day_in_cycle = config['day_in_cycle']
 
+
 # Set the temperature and humidity thresholds
 temperature_threshold = 101
 humidity_threshold = 55
@@ -51,37 +53,23 @@ GPIO.setup(humidifier_relay_pin, GPIO.OUT)
 GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 GPIO.setup(20, GPIO.OUT)
 GPIO.output(20, GPIO.HIGH)
-temperature = ""
-humidity = ""
 
-last_sensor_read= None
+
+
+
 
 def read_sensor_data():
-    global temperature
-    global humidity
-    global last_sensor_read
-    current_time= datetime.now()
-    if last_sensor_read == None:
     # Read the humidity and temperature
-        new_humidity, new_temperature = Adafruit_DHT.read_retry(sensor, pin)
-        if new_humidity is not None and new_temperature is not None:
-                temperature = (new_temperature * 9 / 5) + 32
-                humidity = new_humidity
-                last_sensor_read = datetime.now()
-        else:
-            print('Failed to read data from sensor')
-    elif current_time - last_sensor_read >= timedelta(seconds=6):
-            new_humidity, new_temperature = Adafruit_DHT.read_retry(sensor, pin)
-            if new_humidity is not None and new_temperature is not None:
-                temperature = (new_temperature * 9 / 5) + 32
-                humidity = new_humidity
-                last_sensor_read = datetime.now()
+    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+    if humidity is not None and temperature is not None:
+        temperature = (temperature * 9/5) + 32
+        return round(temperature,1), round(humidity,1)
     else:
-        pass
+        print('Failed to read data from sensor')
+        return None, None
 
 
-def log_data(temperature, humidity, last_relay_on, temperature_relay_status,
-             humidity_relay_status, day_in_cycle):
+def log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status,day_in_cycle):
     # Create a data dictionary
     data = {
         'Time': time.strftime("%m-%d-%Y %H:%M"),
@@ -90,46 +78,39 @@ def log_data(temperature, humidity, last_relay_on, temperature_relay_status,
         'Humidity(%)': humidity,
         'Humidity Relay Status': humidity_relay_status,
         'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P"),
-        'Day in Egg Cycle': day_in_cycle
+        'Day in Egg Cycle' : day_in_cycle
     }
     # Insert the data into the incubator collection
     incubator.insert_one(data)
-
-egg_turner_relay = None
-
+    
 
 def eggTurner():
-    global egg_turner_relay
     current_time = datetime.now()
     global last_relay_on
     day_in_cycle = day()
-    if day_in_cycle < 18:
+    if day_in_cycle <18:
         if last_relay_on is None:
             last_relay_on = datetime.now()
-            egg_turner_relay = 1
-        if egg_turner_relay == 1:
-            if current_time - last_relay_on >= timedelta(
-                    seconds=relay_interval):
+        if GPIO.input(egg_turner_relay_pin) == 1:
+            if current_time - last_relay_on >= timedelta(seconds=relay_interval):
                 # Turn on the relay for 2 minutes
                 GPIO.output(egg_turner_relay_pin, GPIO.LOW)
-                egg_turner_relay = 0
                 last_relay_on = current_time
-        elif egg_turner_relay_pin == 0:
-            if current_time - last_relay_on >= timedelta(
-                    seconds=roll_interval):
+        elif GPIO.input(egg_turner_relay_pin) == 0:        
+            if current_time - last_relay_on >= timedelta(seconds=roll_interval):
                 GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
-                egg_turner_relay = 1
-
+                
     return last_relay_on
 
 
 def control():
     global humidifier_relay_pin
-    global temperature
-    global humidity
+    temperature, humidity = read_sensor_data()
+    
     global temperature_relay_status
     global humidity_relay_status
 
+    
     if temperature <= (temperature_threshold - 1):
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
@@ -141,19 +122,22 @@ def control():
     elif temperature > temperature_threshold:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
-        if GPIO.input(heat_relay_pin) == 1:
+        if GPIO.input(heat_relay_pin) == 1: 
             temperature_relay_status = "OFF"
         else:
             print("HEAT GPIO not setting to High or OFF")
+    
+
 
     # Check if the humidity is above the threshold
-    if humidity < (humidity_threshold - 5):
+    if humidity < (humidity_threshold-5):
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
         if GPIO.input(humidifier_relay_pin) == 0:
             humidity_relay_status = "ON"
         else:
             print("HUMIDITY GPIO not setting to low or ON")
+        
 
     else:
         # Turn off the humidifier
@@ -161,8 +145,9 @@ def control():
         if GPIO.input(humidifier_relay_pin) == 1:
             humidity_relay_status = "OFF"
         else:
-            print("HUMIDITY GPIO not setting to HIGH or OFF")
-
+             print("HUMIDITY GPIO not setting to HIGH or OFF")
+        
+    
 
 def day():
     global humidity_threshold
@@ -173,14 +158,12 @@ def day():
         humidity_threshold = 75
     return day_in_cycle
 
-
 def update_config(variable, value):
     with open("config.json", "r") as config_file:
         config = json.load(config_file)
         config[variable] = value
     with open("config.json", "w") as config_file:
-        json.dump(config, config_file)
-
+        json.dump(config, config_file) 
 
 def clear_database():
     incubator.drop()
@@ -188,27 +171,22 @@ def clear_database():
 
 def read_and_log_data():
     global dataLogged
-    global temperature
-    global humidity
     try:
         while True:
             day_in_cycle = day()
             control()
             last_relay_on = eggTurner()
+            temperature, humidity = read_sensor_data()
             if dataLogged is None:
                 dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on,
-                         temperature_relay_status, humidity_relay_status,
-                         day_in_cycle)
+                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
 
-            elif datetime.now() - dataLogged >= timedelta(
-                    seconds=log_interval):
+            elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
                 dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on,
-                         temperature_relay_status, humidity_relay_status,
-                         day_in_cycle)
+                log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
+ 
             time.sleep(20)
-
+            
     except KeyboardInterrupt:
         pass
     finally:
@@ -216,52 +194,46 @@ def read_and_log_data():
         GPIO.cleanup()
         # Close the MongoDB connection
         client.close()
+        
+
+
 
 
 @app.route("/")
 def index():
-    global temperature
-    global humidity
-    day_in_cycle = day()
-    last_relay_on = eggTurner()
-    last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
-    # Fetch the data from the MongoDB collection
-    cursor = incubator.find().limit(48).sort("Time", -1)
-    historical_data = []
-    for data in cursor:
-        historical_data.append({
-            'Time':
-            data['Time'],
-            'Temperature(F)':
-            data['Temperature(F)'],
-            'Temperature Relay Status':
-            data['Temperature Relay Status'],
-            'Humidity(%)':
-            data['Humidity(%)'],
-            'Humidity Relay Status':
-            data['Humidity Relay Status'],
-            'Last Egg Turn':
-            data['Last Egg Turn'],
-            'Day in Egg Cycle':
-            data['Day in Egg Cycle']
-        })
-    data = {
-        'log_interval': log_interval,
-        'relay_interval': relay_interval,
-        'roll_interval': roll_interval,
-        'temperature_threshold': temperature_threshold,
-        'humidity_threshold': humidity_threshold,
-        'historical_data': historical_data,
-        'temperature': temperature,
-        'humidity': humidity,
-        'last_relay_on': last_relay_on,
-        'temperature_relay_status': temperature_relay_status,
-        'humidity_relay_status': humidity_relay_status,
-        'day_in_cycle': day_in_cycle,
-        'start_date': start_date.strftime("%m-%d-%Y")
-    }
-    return render_template('index.html', data=data)
-
+        day_in_cycle = day()
+        temperature, humidity = read_sensor_data()
+        last_relay_on = eggTurner()
+        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
+        # Fetch the data from the MongoDB collection
+        cursor = incubator.find().limit(48).sort("Time", -1)
+        historical_data = []
+        for data in cursor:
+            historical_data.append({
+                'Time': data['Time'],
+                'Temperature(F)': data['Temperature(F)'],
+                'Temperature Relay Status': data['Temperature Relay Status'],
+                'Humidity(%)': data['Humidity(%)'],
+                'Humidity Relay Status': data['Humidity Relay Status'],
+                'Last Egg Turn': data['Last Egg Turn'],
+                'Day in Egg Cycle' : data['Day in Egg Cycle']
+            })
+        data = {
+            'log_interval': log_interval,
+            'relay_interval': relay_interval,
+            'roll_interval': roll_interval,
+            'temperature_threshold': temperature_threshold,
+            'humidity_threshold': humidity_threshold,
+            'historical_data': historical_data,
+            'temperature': temperature,
+            'humidity': humidity,
+            'last_relay_on': last_relay_on,
+            'temperature_relay_status': temperature_relay_status,
+            'humidity_relay_status': humidity_relay_status,
+            'day_in_cycle': day_in_cycle,
+            'start_date': start_date.strftime("%m-%d-%Y")
+        }
+        return render_template('index.html',data=data)
 
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
@@ -279,14 +251,14 @@ def update_settings():
     elif variable == 'humidity_threshold':
         humidity_threshold = int(value)
     elif variable == 'log_interval':
-        log_interval = int(value) * 60
+        log_interval = int(value)*60
     elif variable == 'relay_interval':
-        relay_interval = int(value) * 60 * 60
+        relay_interval = int(value)*60*60
     elif variable == 'roll_interval':
-        roll_interval = int(value) * 60
+        roll_interval = int(value)*60
     elif variable == 'start_date':
         date = datetime.strptime(value, '%m/%d/%Y')
-        start_date = datetime(date.year, date.month, date.day)
+        start_date = datetime(date.year,date.month,date.day)
         formatted_date = date.strftime('%Y-%m-%d')
         update_config('start_date', formatted_date)
         clear_database()
