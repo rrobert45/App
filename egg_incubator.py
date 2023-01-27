@@ -95,25 +95,30 @@ def log_data(temperature, humidity, last_relay_on, temperature_relay_status,
     # Insert the data into the incubator collection
     incubator.insert_one(data)
 
+egg_turner_relay = None
+
 
 def eggTurner():
-    global egg_turner_relay_pin
+    global egg_turner_relay
     current_time = datetime.now()
     global last_relay_on
     day_in_cycle = day()
     if day_in_cycle < 18:
         if last_relay_on is None:
             last_relay_on = datetime.now()
-        if GPIO.input(egg_turner_relay_pin) == 1:
+            egg_turner_relay = 1
+        if egg_turner_relay == 1:
             if current_time - last_relay_on >= timedelta(
                     seconds=relay_interval):
                 # Turn on the relay for 2 minutes
                 GPIO.output(egg_turner_relay_pin, GPIO.LOW)
+                egg_turner_relay = 0
                 last_relay_on = current_time
-        elif GPIO.input(egg_turner_relay_pin) == 0:
+        elif egg_turner_relay_pin == 0:
             if current_time - last_relay_on >= timedelta(
                     seconds=roll_interval):
                 GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
+                egg_turner_relay = 1
 
     return last_relay_on
 
