@@ -105,8 +105,8 @@ def eggTurner():
 
 def control():
     global humidifier_relay_pin
+    global heat_relay_pin
     temperature, humidity = read_sensor_data()
-    
     global temperature_relay_status
     global humidity_relay_status
 
@@ -126,8 +126,6 @@ def control():
             temperature_relay_status = "OFF"
         else:
             print("HEAT GPIO not setting to High or OFF")
-    
-
 
     # Check if the humidity is above the threshold
     if humidity < (humidity_threshold-5):
@@ -137,8 +135,6 @@ def control():
             humidity_relay_status = "ON"
         else:
             print("HUMIDITY GPIO not setting to low or ON")
-        
-
     else:
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
@@ -190,6 +186,11 @@ def read_and_log_data():
             
     except KeyboardInterrupt:
         pass
+    finally:
+                # Clean up the GPIO pins
+        GPIO.cleanup()
+        # Close the MongoDB connection
+        client.close()
         
 
 
@@ -265,15 +266,8 @@ def update_settings():
 
 
 if __name__ == "__main__":
-    try:
-        thread = Thread(target=read_and_log_data)
-        thread.start()
-        app.run(debug=True, host='0.0.0.0')
+    thread = Thread(target=read_and_log_data)
+    thread.start()
+    app.run(debug=True, host='0.0.0.0')
             
-    except KeyboardInterrupt:
-        pass
-    finally:
-        # Clean up the GPIO pins
-        GPIO.cleanup()
-        # Close the MongoDB connection
-        client.close()
+   
