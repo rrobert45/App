@@ -180,13 +180,13 @@ def read_and_log_data():
             if dataLogged is None:
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
-                
+
             elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
                 dataLogged = datetime.now()
                 log_data(temperature, humidity, last_relay_on,temperature_relay_status,humidity_relay_status, day_in_cycle)
-               
+ 
             
-            time.sleep(10)
+            time.sleep(20)
             
     except KeyboardInterrupt:
         pass
@@ -203,8 +203,7 @@ def read_and_log_data():
 @app.route("/")
 def index():
         day_in_cycle = day()
-        thread = Thread(target=read_and_log_data)
-        thread.start()
+
         temperature, humidity = read_sensor_data()
         last_relay_on = eggTurner()
         last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P")
@@ -271,4 +270,6 @@ def update_settings():
 
 
 if __name__ == "__main__":
+    thread = Thread(target=read_and_log_data)
+    thread.start()
     app.run(debug=True, host='0.0.0.0')
