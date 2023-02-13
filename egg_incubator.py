@@ -1,12 +1,13 @@
 from flask import Flask, render_template,request, jsonify,redirect 
 import time
-import Adafruit_DHT
 import RPi.GPIO as GPIO
 from threading import Thread
 from pymongo import MongoClient
 import pymongo
 from datetime import datetime, timedelta
 import json
+import board
+import adafruit_ahtx0
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -23,8 +24,8 @@ incubator = db[config['collection']]
 app = Flask(__name__, static_folder='static')
 
 # Set the sensor type (DHT22) and the GPIO pin number
-sensor = Adafruit_DHT.DHT22
-pin = 4
+i2c = board.I2C()
+sensor = adafruit_ahtx0.AHTx0(i2c)
 
 # Set the relay pin number
 egg_turner_relay_pin = 17
@@ -58,7 +59,7 @@ GPIO.setup(egg_turner_relay_pin, GPIO.OUT)
 
 def read_sensor_data():
     # Read the humidity and temperature
-    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+    humidity, temperature = sensor.relative_humidity, sensor.temperature
     if humidity is not None and temperature is not None:
         temperature = (temperature * 9/5) + 32
         return round(temperature,1), round(humidity,1)

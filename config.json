@@ -15,7 +15,7 @@
     "start_date": "2023-01-26",
     "temperature_threshold": 101,
     "humidity_threshold": 50,
-    "uri": "mongodb+srv://rrobert45:pa55word@cluster0.r8sgbwj.mongodb.net/?retryWrites=true&w=majority",
+    "uri": "mongodb+srv://rrobert45:pa55word@cluster0.hcpuihw.mongodb.net/?retryWrites=true&w=majority",
     "database": "EggApp",
     "collection": "incubator"
 }
