@@ -34,78 +34,58 @@
 </head>
 
 <body class="bg-gradient-primary">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h4 class="m-0 font-weight-bold text-primary">Settings</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Variable</th>
-                                    <th>Value</th>
-                                    <th>Update</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>How often data should be logged</td>
-                                    <td>{{ data.log_interval/60|int }} minutes</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('log_interval')">Update</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Time Between rolling Eggs</td>
-                                    <td>{{ data.relay_interval /60/60|int }} hours</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('relay_interval')">Update</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Egg Roll Time</td>
-                                    <td>{{ data.roll_interval/60|int }} minutes</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('roll_interval')">Update</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Temperature Threshold</td>
-                                    <td>{{ data.temperature_threshold }}F</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('temperature_threshold')">Update</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Humidity Threshold</td>
-                                    <td>{{ data.humidity_threshold }} %</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('humidity_threshold')">Update</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Start Day</td>
-                                    <td>{{ data.start_date }}</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="updateValue('start_date')">Update</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Data Log Interval</h2>
+                <p class="card-text">{{ data.log_interval/60|int }} minutes</p>
             </div>
         </div>
-    </div>
+    
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Egg Roller Delay</h2>
+                <p class="card-text">{{ data.relay_interval /60/60|int }} hours</p>
+                <h3 class="card-subtitle mb-2 text-muted">Relay State: {{ humid_state }}</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Egg Roller On</h2>
+                <p class="card-text">{{ data.roll_interval/60|int }} minutes</p>
+                <h3 class="card-subtitle mb-2 text-muted">Relay State: {{ humid_state }}</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Temperature Threshold</h2>
+                <p class="card-text">{{ data.temperature_threshold }}F</p>
+                <h3 class="card-subtitle mb-2 text-muted">Relay State: {{ humid_state }}</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Humidity Threshold</h2>
+                <p class="card-text">{{ data.humidity_threshold }}%</p>
+                <h3 class="card-subtitle mb-2 text-muted">Relay State: {{ humid_state }}</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Humidity</h2>
+                <p class="card-text">{{ humidity }}%</p>
+                <h3 class="card-subtitle mb-2 text-muted">Relay State: {{ humid_state }}</h3>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h2>Start Date</h2>
+                <p>{{ start_date }}</p>
+                <p></p>
+                <h2>Hatch Day</h2>
+                <p>{{ hatch_day }}</p>
+            </div>
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
