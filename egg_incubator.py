@@ -44,8 +44,8 @@ day_in_cycle = config['day_in_cycle']
 
 
 # Set the temperature and humidity thresholds
-temperature_threshold = 101
-humidity_threshold = 55
+temperature_threshold = 100
+humidity_threshold = 50
 
 # Initialize the GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -65,18 +65,24 @@ def read_sensor_data():
 
 
 def log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle):
-    # Create a data dictionary
-    data = {
-        'Time': time.strftime("%m-%d-%Y %H:%M"),
-        'Temperature(F)': temperature,
-        'Temperature Relay Status': temperature_relay_status,
-        'Humidity(%)': humidity,
-        'Humidity Relay Status': humidity_relay_status,
-        'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else '',
-        'Day in Egg Cycle' : day_in_cycle
-    }
-    # Insert the data into the incubator collection
-    incubator.insert_one(data)
+    # Get the most recent record from the database
+    last_record = incubator.find_one(sort=[('_id', pymongo.DESCENDING)])
+
+    # Check if a record has been stored within the log interval
+    if last_record is None or (datetime.now() - datetime.strptime(last_record['Time'], '%m-%d-%Y %H:%M')).total_seconds() >= log_interval:
+        # Create a data dictionary
+        data = {
+            'Time': time.strftime("%m-%d-%Y %H:%M"),
+            'Temperature(F)': temperature,
+            'Temperature Relay Status': temperature_relay_status,
+            'Humidity(%)': humidity,
+            'Humidity Relay Status': humidity_relay_status,
+            'Last Egg Turn': last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else '',
+            'Day in Egg Cycle': day_in_cycle
+        }
+
+        # Insert the data into the incubator collection
+        incubator.insert_one(data)
 
 
 def eggTurner():

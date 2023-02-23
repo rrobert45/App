@@ -1,9 +1,5 @@
 {
-    "sensor": "Adafruit_DHT.DHT22",
-    "pin": 4,
-    "egg_turner_relay_pin": 17,
-    "heat_relay_pin": 18,
-    "humidifier_relay_pin": 26,
+    
     "log_interval": 900,
     "relay_interval": 7200,
     "roll_interval": 120,
@@ -12,9 +8,9 @@
     "temperature_relay_status": "",
     "humidity_relay_status": "",
     "day_in_cycle": "",
-    "start_date": "2023-01-26",
-    "temperature_threshold": 101,
-    "humidity_threshold": 50,
+    "start_date": "2023-02-26",
+    
+    
     "uri": "mongodb+srv://rrobert45:pa55word@cluster0.hcpuihw.mongodb.net/?retryWrites=true&w=majority",
     "database": "EggApp",
     "collection": "incubator"
