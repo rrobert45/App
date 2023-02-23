@@ -148,9 +148,13 @@ def day():
     day_in_cycle = (current_date - start_date).days % total_days
     if day_in_cycle >= 18:
         humidity_threshold = 75
+    return day_in_cycle
+
+
+def lock_down_and_hatch():
     lock_down_date = start_date + timedelta(days=18)
     hatch_date = start_date + timedelta(days=21)
-    return day_in_cycle,lock_down_date,hatch_date
+    return lock_down_date,hatch_date
 
 
 def update_config(variable, value):
@@ -189,7 +193,8 @@ def read_and_log_data():
 
 @app.route("/")
 def index():
-    day_in_cycle,lock_down_date,hatch_date = day()
+    day_in_cycle = day()
+    lock_down_date,hatch_date = lock_down_and_hatch()
     temperature, humidity = read_sensor_data()
     last_relay_on = eggTurner()
     last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
