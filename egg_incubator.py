@@ -224,8 +224,8 @@ def index():
         'humidity_relay_status': humidity_relay_status,
         'day_in_cycle': day_in_cycle,
         'start_date': start_date.strftime("%m-%d-%Y"),
-        'lock_down_date': lock_down_date,
-        'hatch_date': hatch_date
+        'lock_down_date': lock_down_date.strftime("%m-%d-%Y"),
+        'hatch_date': hatch_date.strftime("%m-%d-%Y")
     }
     return render_template('index.html', data=data)
 
