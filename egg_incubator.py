@@ -234,7 +234,7 @@ def index():
     last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     cursor = incubator.find().limit(48).sort("Time", -1)
     historical_data = []
-    egg_cycle_data = get_egg_cycle_statistics(historical_data)
+    
     for data in cursor:
         historical_data.append({
             'Time': data['Time'],
@@ -245,6 +245,7 @@ def index():
             'Last Egg Turn': data['Last Egg Turn'],
             'Day in Egg Cycle': data['Day in Egg Cycle']
         })
+    egg_cycle_data = get_egg_cycle_statistics(historical_data)
     data = {
         'log_interval': log_interval,
         'relay_interval': relay_interval,
