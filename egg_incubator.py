@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 import json
 import board
 import adafruit_ahtx0
+from statistics import mean, pstdev
+import numpy as np
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -190,6 +192,38 @@ def read_and_log_data():
         # Close the MongoDB connection
         client.close()
 
+def get_egg_cycle_statistics(historical_data):
+    egg_cycle_dict = {}
+    for data in historical_data:
+        day = data['Day in Egg Cycle']
+        temperature = data['Temperature(F)']
+        humidity = data['Humidity(%)']
+        if day in egg_cycle_dict:
+            egg_cycle_dict[day]['temperature'].append(temperature)
+            egg_cycle_dict[day]['humidity'].append(humidity)
+        else:
+            egg_cycle_dict[day] = {
+                'temperature': [temperature],
+                'humidity': [humidity],
+            }
+    
+    egg_cycle_statistics = []
+    for day, values in egg_cycle_dict.items():
+        avg_temp = np.mean(values['temperature'])
+        std_temp = np.std(values['temperature'])
+        avg_hum = np.mean(values['humidity'])
+        std_hum = np.std(values['humidity'])
+        egg_cycle_statistics.append({
+            'Day in Egg Cycle': day,
+            'Average Temperature (F)': round(avg_temp, 2),
+            'Temperature Standard Deviation': round(std_temp, 2),
+            'Average Humidity (%)': round(avg_hum, 2),
+            'Humidity Standard Deviation': round(std_hum, 2),
+        })
+        
+    egg_cycle_statistics.sort(key=lambda x: x['Day in Egg Cycle'], reverse=True)
+    return egg_cycle_statistics
+
 
 @app.route("/")
 def index():
@@ -200,6 +234,7 @@ def index():
     last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     cursor = incubator.find().limit(48).sort("Time", -1)
     historical_data = []
+    egg_cycle_data = get_egg_cycle_statistics(historical_data)
     for data in cursor:
         historical_data.append({
             'Time': data['Time'],
@@ -225,9 +260,12 @@ def index():
         'day_in_cycle': day_in_cycle,
         'start_date': start_date.strftime("%m-%d-%Y"),
         'lock_down_date': lock_down_date.strftime("%m-%d-%Y"),
-        'hatch_date': hatch_date.strftime("%m-%d-%Y")
+        'hatch_date': hatch_date.strftime("%m-%d-%Y"),
+        'egg_cycle_data': egg_cycle_data,
+
     }
     return render_template('index.html', data=data)
+
 
 
 @app.route('/update_settings', methods=['POST'])

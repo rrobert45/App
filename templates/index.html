@@ -106,6 +106,41 @@
             </div>
         </div>
     </div>
+
+    <!-- New Table for Statistical Information -->
+    <div class="col-12 mt-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h4 class="m-0 font-weight-bold text-primary">Statistical Information</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Day in Egg Cycle</th>
+                            <th>Average Temperature (F)</th>
+                            <th>Temperature Standard Deviation</th>
+                            <th>Average Humidity (%)</th>
+                            <th>Humidity Standard Deviation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in data.egg_cycle_data %}
+                        <tr>
+                            <td>{{ data['Day in Egg Cycle'] }}</td>
+                            <td>{{ data['Average Temperature (F)'] }}</td>
+                            <td>{{ data['Temperature Standard Deviation'] }}</td>
+                            <td>{{ data['Average Humidity (%)'] }}</td>
+                            <td>{{ data['Humidity Standard Deviation'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
