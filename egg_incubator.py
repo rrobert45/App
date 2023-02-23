@@ -37,7 +37,6 @@ log_interval = config['log_interval']
 relay_interval = config['relay_interval']
 roll_interval = config['roll_interval']
 last_relay_on = config['last_relay_on']
-dataLogged = config['dataLogged']
 temperature_relay_status = config['temperature_relay_status']
 humidity_relay_status = config['humidity_relay_status']
 day_in_cycle = config['day_in_cycle']
@@ -165,7 +164,6 @@ def clear_database():
 
 
 def read_and_log_data():
-    global dataLogged
     global last_relay_on
     global day_in_cycle
 
@@ -175,13 +173,7 @@ def read_and_log_data():
             control()
             last_relay_on = eggTurner()
             temperature, humidity = read_sensor_data()
-            if dataLogged is None:
-                dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle)
-            elif datetime.now() - dataLogged >= timedelta(seconds=log_interval):
-                dataLogged = datetime.now()
-                log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle)
-
+            log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle)
             time.sleep(20)
             
     except KeyboardInterrupt:
