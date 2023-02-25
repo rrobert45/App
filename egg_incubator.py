@@ -30,9 +30,9 @@ i2c = board.I2C()
 sensor = adafruit_ahtx0.AHTx0(i2c)
 
 # Set the relay pin number
-egg_turner_relay_pin = 17
-heat_relay_pin = 18
-humidifier_relay_pin = 27
+egg_turner_relay_pin = 19
+heat_relay_pin = 21
+humidifier_relay_pin = 20
 
 # Set the interval for logging data and turning on the relay (in seconds)
 log_interval = config['log_interval']
