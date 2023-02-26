@@ -48,7 +48,7 @@ class IncubatorController:
         self.humidity_threshold = 50
 
         # Setup the Flask app
-        self.app = Flask(__name__, static_folder='static')
+        self.app = Flask(__name__, static_folder='static', template_folder='templates')
 
         # Initialize the GPIO pins
         GPIO.setmode(GPIO.BCM)
