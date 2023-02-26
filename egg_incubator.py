@@ -232,14 +232,10 @@ def get_egg_cycle_statistics(historical_data):
 
 @app.route("/")
 def index():
-    day_in_cycle = day()
     lock_down_date,hatch_date = lock_down_and_hatch()
     temperature, humidity = read_sensor_data()
-    last_relay_on = eggTurner()
-    if isinstance(last_relay_on, tuple):
-            last_relay_on = last_relay_on[0].strftime("%m-%d-%Y %I:%M %P") if last_relay_on[0] is not None else ''
-    else:
-        last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''    
+    last_relay_on,day_in_cycle = eggTurner()
+    last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     cursor = incubator.find().limit(48).sort("Time", -1)
     historical_data = []
     
