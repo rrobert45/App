@@ -86,9 +86,9 @@ def log_data(temperature, humidity, last_relay_on, temperature_relay_status, hum
         incubator.insert_one(data)
 
 
-def eggTurner():
+def eggTurner(day_in_cycle):
     global last_relay_on
-    global day_in_cycle
+    
     current_time = datetime.now()
     if day_in_cycle < 18:
         if last_relay_on is None:
@@ -101,8 +101,7 @@ def eggTurner():
         elif GPIO.input(egg_turner_relay_pin) == 0:        
             if current_time - last_relay_on >= timedelta(seconds=roll_interval):
                 GPIO.output(egg_turner_relay_pin, GPIO.HIGH)
-    return last_relay_on, day_in_cycle
-
+    return last_relay_on
 
 
 def control():
@@ -111,45 +110,25 @@ def control():
     global temperature_threshold
     global humidity_threshold
     temperature, humidity = read_sensor_data()
-
     if temperature < temperature_threshold - 1:
         # Turn on the heat source
         GPIO.output(heat_relay_pin, GPIO.LOW)
-        if GPIO.input(heat_relay_pin) == 0:
-            temperature_relay_status = "ON"
-        else:
-            print("HEAT GPIO not setting to low or ON")
     elif temperature > temperature_threshold:
         # Turn off the heat source
         GPIO.output(heat_relay_pin, GPIO.HIGH)
-        if GPIO.input(heat_relay_pin) == 1: 
-            temperature_relay_status = "OFF"
-        else:
-            print("HEAT GPIO not setting to High or OFF")
     else:
         # Do nothing
         pass
-
     if humidity < (humidity_threshold - 5):
         # Turn on the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.LOW)
-        if GPIO.input(humidifier_relay_pin) == 0:
-            humidity_relay_status = "ON"
-        else:
-            print("HUMIDITY GPIO not setting to low or ON")
     else:
         # Turn off the humidifier
         GPIO.output(humidifier_relay_pin, GPIO.HIGH)
-        if GPIO.input(humidifier_relay_pin) == 1:
-            humidity_relay_status = "OFF"
-        else:
-            print("HUMIDITY GPIO not setting to HIGH or OFF")
-
     return temperature, humidity
 
 def day():
     global humidity_threshold
-    global day_in_cycle
     current_date = datetime.now()
     total_days = 21
     day_in_cycle = (current_date - start_date).days % total_days
@@ -176,8 +155,6 @@ def clear_database():
 
 
 def read_and_log_data():
-    global last_relay_on
-    global day_in_cycle
     global temperature_relay_status
     global humidity_relay_status
 
@@ -185,7 +162,7 @@ def read_and_log_data():
         while True:
             day_in_cycle = day()
             temperature, humidity= control()
-            last_relay_on, day_in_cycle = eggTurner()
+            last_relay_on = eggTurner(day_in_cycle)
             log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle)
             time.sleep(20)
             
@@ -232,9 +209,10 @@ def get_egg_cycle_statistics(historical_data):
 
 @app.route("/")
 def index():
+    day_in_cycle = day()
+    last_relay_on = eggTurner(day_in_cycle)
     lock_down_date,hatch_date = lock_down_and_hatch()
     temperature, humidity = read_sensor_data()
-    last_relay_on,day_in_cycle = eggTurner()
     last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     cursor = incubator.find().limit(48).sort("Time", -1)
     historical_data = []
