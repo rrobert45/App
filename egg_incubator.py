@@ -11,7 +11,7 @@ import adafruit_ahtx0
 from statistics import mean, pstdev
 import numpy as np
 
-with open('config.json') as config_file:
+with open('/home/robert/Desktop/App/config.json') as config_file:
     config = json.load(config_file)
 
 start_date = datetime.strptime(config['start_date'], '%Y-%m-%d')
