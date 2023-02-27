@@ -169,21 +169,24 @@ def read_and_log_data():
     global temperature_relay_status
     global humidity_relay_status
 
-    try:
-        while True:
+    while True:
+        try:
             day_in_cycle = day()
             temperature, humidity= control()
             last_relay_on = eggTurner(day_in_cycle)
             log_data(temperature, humidity, last_relay_on, temperature_relay_status, humidity_relay_status, day_in_cycle)
             time.sleep(20)
             
-    except KeyboardInterrupt:
-        pass
-    finally:
-        # Clean up the GPIO pins
-        GPIO.cleanup()
-        # Close the MongoDB connection
-        client.close()
+        except KeyboardInterrupt:
+            break
+        except:
+            print("An error occurred. Retrying in 30 seconds...")
+            time.sleep(30)
+            continue
+    # Clean up the GPIO pins
+    GPIO.cleanup()
+    # Close the MongoDB connection
+    client.close()
 
 def get_egg_cycle_statistics(historical_data):
     egg_cycle_dict = {}
