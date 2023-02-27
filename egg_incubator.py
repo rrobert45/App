@@ -230,9 +230,9 @@ def index():
     day_in_cycle = day_for_web(start_date)
     lock_down_date,hatch_date = lock_down_and_hatch(start_date)
     temperature, humidity = read_sensor_data()
-    last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     last_record = incubator.find_one(sort=[('_id', pymongo.DESCENDING)], projection={'Last Egg Turn': 1})
     last_relay_on = last_record.get('Last Egg Turn', '')
+    #last_relay_on = last_relay_on.strftime("%m-%d-%Y %I:%M %P") if last_relay_on is not None else ''
     cursor = incubator.find().limit(48).sort("Time", -1)
     historical_data = []
     
