@@ -179,10 +179,10 @@ def read_and_log_data():
             
         except KeyboardInterrupt:
             break
-        except:
+        #except:
             print("An error occurred. Retrying in 30 seconds...")
-            time.sleep(30)
-            continue
+        time.sleep(30)
+        #continue
     # Clean up the GPIO pins
     GPIO.cleanup()
     # Close the MongoDB connection
